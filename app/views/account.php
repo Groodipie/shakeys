@@ -1,65 +1,3 @@
-<?php
-// account.php
-require_once 'includes/auth_check.php';
-require_once 'db.php';
-$pageTitle = "My Account — Shakey's Delivery";
-$custId = $_SESSION['cust_id'];
-$success = $error = '';
-
-// Fetch fresh customer data
-$stmt = $pdo->prepare("SELECT * FROM Customer WHERE Cust_ID = ?");
-$stmt->execute([$custId]);
-$cust = $stmt->fetch();
-
-// Handle update profile
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-
-    if ($_POST['action'] === 'update_profile') {
-        $first   = trim($_POST['first_name'] ?? '');
-        $last    = trim($_POST['last_name']  ?? '');
-        $phone   = trim($_POST['phone']      ?? '');
-        $address = trim($_POST['address']    ?? '');
-
-        if ($first && $last && $phone && $address) {
-            $pdo->prepare("UPDATE Customer SET Cust_FirstName=?,Cust_LastName=?,Cust_Phone=?,Cust_Address=? WHERE Cust_ID=?")
-                ->execute([$first,$last,$phone,$address,$custId]);
-            $_SESSION['cust_firstname'] = $first;
-            $_SESSION['cust_lastname']  = $last;
-            $success = 'Profile updated successfully.';
-            $stmt->execute([$custId]);
-            $cust = $stmt->fetch();
-        } else {
-            $error = 'Please fill in all fields.';
-        }
-    }
-
-    if ($_POST['action'] === 'change_password') {
-        $current = $_POST['current_password'] ?? '';
-        $new     = $_POST['new_password']     ?? '';
-        $confirm = $_POST['confirm_password'] ?? '';
-
-        if (!password_verify($current, $cust['Cust_Password'])) {
-            $error = 'Current password is incorrect.';
-        } elseif (strlen($new) < 6) {
-            $error = 'New password must be at least 6 characters.';
-        } elseif ($new !== $confirm) {
-            $error = 'Passwords do not match.';
-        } else {
-            $hash = password_hash($new, PASSWORD_DEFAULT);
-            $pdo->prepare("UPDATE Customer SET Cust_Password=? WHERE Cust_ID=?")->execute([$hash,$custId]);
-            $success = 'Password changed successfully.';
-        }
-    }
-}
-
-// Order count for summary
-$orderCount = $pdo->prepare("SELECT COUNT(*) FROM `Order` WHERE Order_CustID=?");
-$orderCount->execute([$custId]);
-$totalOrders = $orderCount->fetchColumn();
-
-include 'includes/header.php';
-?>
-
 <div class="container-fluid px-3 px-md-4 py-3"
      style="background:radial-gradient(ellipse at top,#8b0000 0%,var(--sk-red) 50%,#a01010 100%);min-height:calc(100vh - 120px);">
 
@@ -67,26 +5,24 @@ include 'includes/header.php';
 
   <div class="mx-auto" style="max-width:560px;">
 
-    <?php if($success): ?>
-    <div class="alert alert-success py-2 mb-3" style="font-size:.85rem;"><?= htmlspecialchars($success) ?></div>
+    <?php if ($success): ?>
+    <div class="alert alert-success py-2 mb-3" style="font-size:.85rem;"><?= e($success) ?></div>
     <?php endif; ?>
-    <?php if($error): ?>
-    <div class="alert alert-danger py-2 mb-3" style="font-size:.85rem;"><?= htmlspecialchars($error) ?></div>
+    <?php if ($error): ?>
+    <div class="alert alert-danger py-2 mb-3" style="font-size:.85rem;"><?= e($error) ?></div>
     <?php endif; ?>
 
-    <!-- Profile card -->
     <div class="bg-white rounded-4 overflow-hidden shadow-lg mb-3">
       <div class="py-4 px-4 text-center" style="background:var(--sk-gold);">
         <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 fw-bold"
              style="width:64px;height:64px;background:#555;color:#fff;font-size:1.5rem;">
-          <?= strtoupper(($cust['Cust_FirstName'][0]??'U')) ?>
+          <?= e(strtoupper(($cust['Cust_FirstName'][0] ?? 'U'))) ?>
         </div>
-        <h5 class="fw-bold mb-0"><?= htmlspecialchars($cust['Cust_FirstName'].' '.$cust['Cust_LastName']) ?></h5>
-        <small><?= htmlspecialchars($cust['Cust_Phone']) ?></small><br>
-        <small><?= htmlspecialchars($cust['Cust_Email']) ?></small>
+        <h5 class="fw-bold mb-0"><?= e($cust['Cust_FirstName'] . ' ' . $cust['Cust_LastName']) ?></h5>
+        <small><?= e($cust['Cust_Phone']) ?></small><br>
+        <small><?= e($cust['Cust_Email']) ?></small>
       </div>
 
-      <!-- Stats row -->
       <div class="d-flex border-bottom">
         <div class="flex-fill text-center py-3 border-end">
           <div class="fw-bold fs-5" style="color:var(--sk-red);"><?= $totalOrders ?></div>
@@ -98,28 +34,26 @@ include 'includes/header.php';
         </div>
       </div>
 
-      <!-- Account details -->
       <div class="px-4 pt-3 pb-1">
         <h6 class="fw-bold mb-3">My Account</h6>
         <?php
         $rows = [
-          ['bi-person','Name',           $cust['Cust_FirstName'].' '.$cust['Cust_LastName']],
-          ['bi-phone', 'Mobile Number',  $cust['Cust_Phone']],
-          ['bi-envelope','Email Address',$cust['Cust_Email']],
-          ['bi-geo-alt', 'Address',      $cust['Cust_Address']],
+          ['bi-person',   'Name',          $cust['Cust_FirstName'] . ' ' . $cust['Cust_LastName']],
+          ['bi-phone',    'Mobile Number', $cust['Cust_Phone']],
+          ['bi-envelope', 'Email Address', $cust['Cust_Email']],
+          ['bi-geo-alt',  'Address',       $cust['Cust_Address']],
         ];
-        foreach($rows as [$icon,$label,$val]): ?>
+        foreach ($rows as [$icon, $label, $val]): ?>
         <div class="d-flex gap-3 align-items-center py-2 border-bottom">
           <i class="bi <?= $icon ?> text-muted" style="width:20px;"></i>
           <div>
-            <div style="font-size:.75rem;color:#aaa;"><?= $label ?></div>
-            <div class="fw-semibold" style="font-size:.9rem;"><?= htmlspecialchars($val) ?></div>
+            <div style="font-size:.75rem;color:#aaa;"><?= e($label) ?></div>
+            <div class="fw-semibold" style="font-size:.9rem;"><?= e($val) ?></div>
           </div>
         </div>
         <?php endforeach; ?>
       </div>
 
-      <!-- Account settings -->
       <div class="px-4 py-3">
         <h6 class="fw-bold mb-3">Account Settings</h6>
         <div class="d-grid gap-2">
@@ -156,19 +90,19 @@ include 'includes/header.php';
           <div class="row g-3">
             <div class="col-6">
               <label class="form-label fw-semibold" style="font-size:.84rem;">First name</label>
-              <input type="text" name="first_name" class="form-control" value="<?= htmlspecialchars($cust['Cust_FirstName']) ?>" required>
+              <input type="text" name="first_name" class="form-control" value="<?= e($cust['Cust_FirstName']) ?>" required>
             </div>
             <div class="col-6">
               <label class="form-label fw-semibold" style="font-size:.84rem;">Last name</label>
-              <input type="text" name="last_name" class="form-control" value="<?= htmlspecialchars($cust['Cust_LastName']) ?>" required>
+              <input type="text" name="last_name" class="form-control" value="<?= e($cust['Cust_LastName']) ?>" required>
             </div>
             <div class="col-12">
               <label class="form-label fw-semibold" style="font-size:.84rem;">Phone</label>
-              <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($cust['Cust_Phone']) ?>" required>
+              <input type="text" name="phone" class="form-control" value="<?= e($cust['Cust_Phone']) ?>" required>
             </div>
             <div class="col-12">
               <label class="form-label fw-semibold" style="font-size:.84rem;">Address</label>
-              <input type="text" name="address" class="form-control" value="<?= htmlspecialchars($cust['Cust_Address']) ?>" required>
+              <input type="text" name="address" class="form-control" value="<?= e($cust['Cust_Address']) ?>" required>
             </div>
           </div>
         </div>
@@ -232,5 +166,3 @@ include 'includes/header.php';
     </div>
   </div>
 </div>
-
-<?php include 'includes/footer.php'; ?>

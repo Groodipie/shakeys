@@ -1,45 +1,3 @@
-<?php
-// register.php
-session_start();
-if (isset($_SESSION['cust_id'])) { header('Location: home.php'); exit; }
-
-require_once 'db.php';
-$error = $success = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $first   = trim($_POST['first_name']  ?? '');
-    $last    = trim($_POST['last_name']   ?? '');
-    $phone   = trim($_POST['phone']       ?? '');
-    $email   = trim($_POST['email']       ?? '');
-    $pass    = $_POST['password']         ?? '';
-    $confirm = $_POST['confirm_password'] ?? '';
-    $agree   = isset($_POST['agree']);
-
-    if (!$first || !$last || !$phone || !$email || !$pass) {
-        $error = 'Please fill in all required fields.';
-    } elseif ($pass !== $confirm) {
-        $error = 'Passwords do not match.';
-    } elseif (strlen($pass) < 6) {
-        $error = 'Password must be at least 6 characters.';
-    } elseif (!$agree) {
-        $error = 'You must agree to the Terms and Conditions.';
-    } else {
-        $chk = $pdo->prepare("SELECT Cust_ID FROM Customer WHERE Cust_Email = ?");
-        $chk->execute([$email]);
-        if ($chk->fetch()) {
-            $error = 'This email is already registered. <a href="login.php" style="color:var(--sk-red);">Login here</a>.';
-        } else {
-            $hash = password_hash($pass, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare(
-                "INSERT INTO Customer (Cust_FirstName,Cust_LastName,Cust_Email,Cust_Phone,Cust_Address,Cust_Password)
-                 VALUES (?,?,?,?,?,?)"
-            );
-            $stmt->execute([$first, $last, $email, '+63'.$phone, '', $hash]);
-            $success = 'Account created! <a href="login.php" style="color:var(--sk-red);font-weight:700;">Login now</a>.';
-        }
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,96 +11,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 :root { --sk-red:#C8181E; --sk-dark-red:#9B1015; --sk-black:#1a1a1a; --sk-gold:#D4A017; }
 *,body { font-family:'Nunito',sans-serif; margin:0; }
 body { display:flex; flex-direction:column; min-height:100vh; }
-
-/* ── NAVBAR ── */
 .sk-nav { background:var(--sk-black); padding:.55rem 1.5rem; }
-.sk-logo {
-  width:58px; height:58px; border-radius:50%;
-  background:var(--sk-black); border:2.5px solid var(--sk-gold);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center; line-height:1.15; text-decoration:none; flex-shrink:0;
-}
+.sk-logo { width:58px; height:58px; border-radius:50%; background:var(--sk-black); border:2.5px solid var(--sk-gold); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; line-height:1.15; text-decoration:none; flex-shrink:0; }
 .sk-logo small { color:var(--sk-gold); font-size:5.5px; font-weight:700; letter-spacing:.8px; display:block; }
 .sk-logo span  { color:var(--sk-red);  font-size:12.5px; font-weight:900; font-family:Georgia,serif; }
 .nav-links a { color:#ccc; font-size:13px; font-weight:700; text-decoration:none; padding:6px 13px; transition:color .18s; white-space:nowrap; }
 .nav-links a:hover { color:#fff; }
 .btn-login-nav { background:var(--sk-red); color:#fff; border:none; border-radius:3px; font-size:13px; font-weight:700; padding:6px 18px; cursor:pointer; }
 .btn-login-nav:hover { background:var(--sk-dark-red); }
-
-/* ── BACKGROUND ── */
-.auth-bg {
-  flex:1;
-  background:#C8181E;
-  background-image:
-    radial-gradient(ellipse at 10% 60%, rgba(0,0,0,.22) 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 40%, rgba(0,0,0,.15) 0%, transparent 45%);
-  display:flex; align-items:center; justify-content:center;
-  padding:2.5rem 1rem; position:relative; overflow:hidden;
-}
-.auth-bg::after {
-  content:'🍕';
-  position:absolute; right:3%; top:50%; transform:translateY(-50%);
-  font-size:300px; opacity:.1; pointer-events:none; line-height:1;
-}
-
-/* ── CARD ── */
-.auth-card {
-  background:#fff; border-radius:4px;
-  padding:48px 44px; max-width:500px; width:100%;
-  box-shadow:0 12px 50px rgba(0,0,0,.22); position:relative; z-index:1;
-}
+.auth-bg { flex:1; background:#C8181E; background-image: radial-gradient(ellipse at 10% 60%, rgba(0,0,0,.22) 0%, transparent 45%), radial-gradient(ellipse at 90% 40%, rgba(0,0,0,.15) 0%, transparent 45%); display:flex; align-items:center; justify-content:center; padding:2.5rem 1rem; position:relative; overflow:hidden; }
+.auth-bg::after { content:'🍕'; position:absolute; right:3%; top:50%; transform:translateY(-50%); font-size:300px; opacity:.1; pointer-events:none; line-height:1; }
+.auth-card { background:#fff; border-radius:4px; padding:48px 44px; max-width:500px; width:100%; box-shadow:0 12px 50px rgba(0,0,0,.22); position:relative; z-index:1; }
 @media(max-width:520px){ .auth-card{ padding:32px 20px; } }
-
-/* ── UNDERLINE FIELDS ── */
 .field-wrap { margin-bottom:1.5rem; }
 .field-wrap label { display:block; font-size:.76rem; font-weight:800; color:#444; margin-bottom:4px; letter-spacing:.3px; }
-.field-wrap input,
-.field-wrap select {
-  display:block; width:100%; border:none; border-bottom:1.5px solid #d0d0d0;
-  outline:none; padding:.45rem 0; font-size:.9rem; font-family:'Nunito',sans-serif;
-  background:transparent; color:#222; transition:border-color .18s; border-radius:0;
-  -webkit-appearance:none;
-}
+.field-wrap input,.field-wrap select { display:block; width:100%; border:none; border-bottom:1.5px solid #d0d0d0; outline:none; padding:.45rem 0; font-size:.9rem; font-family:'Nunito',sans-serif; background:transparent; color:#222; transition:border-color .18s; border-radius:0; -webkit-appearance:none; }
 .field-wrap input::placeholder { color:#bbb; font-size:.88rem; }
-.field-wrap input:focus,
-.field-wrap select:focus { border-bottom-color:var(--sk-red); }
+.field-wrap input:focus,.field-wrap select:focus { border-bottom-color:var(--sk-red); }
 .field-wrap.has-eye { position:relative; }
 .field-wrap.has-eye input { padding-right:28px; }
-.field-wrap .eye-btn {
-  position:absolute; right:2px; bottom:10px;
-  background:none; border:none; padding:0; cursor:pointer; color:#bbb; font-size:1rem; line-height:1;
-}
-
-/* ── PHONE GROUP ── */
+.field-wrap .eye-btn { position:absolute; right:2px; bottom:10px; background:none; border:none; padding:0; cursor:pointer; color:#bbb; font-size:1rem; line-height:1; }
 .phone-row { display:flex; align-items:flex-end; border-bottom:1.5px solid #d0d0d0; transition:border-color .18s; margin-bottom:1.5rem; }
 .phone-row:focus-within { border-bottom-color:var(--sk-red); }
-.phone-row label { display:block; font-size:.76rem; font-weight:800; color:#444; margin-bottom:4px; letter-spacing:.3px; }
-.phone-prefix {
-  display:flex; align-items:center; gap:4px;
-  color:var(--sk-red); font-weight:800; font-size:.9rem;
-  padding:.45rem .5rem .45rem 0; white-space:nowrap; cursor:pointer; flex-shrink:0;
-}
+.phone-prefix { display:flex; align-items:center; gap:4px; color:var(--sk-red); font-weight:800; font-size:.9rem; padding:.45rem .5rem .45rem 0; white-space:nowrap; cursor:pointer; flex-shrink:0; }
 .phone-prefix i { font-size:.7rem; }
-.phone-prefix select {
-  position:absolute; opacity:0; width:60px; cursor:pointer;
-}
-.phone-input {
-  flex:1; border:none; outline:none; padding:.45rem 0;
-  font-size:.9rem; font-family:'Nunito',sans-serif; background:transparent; color:#222;
-}
+.phone-prefix select { position:absolute; opacity:0; width:60px; cursor:pointer; }
+.phone-input { flex:1; border:none; outline:none; padding:.45rem 0; font-size:.9rem; font-family:'Nunito',sans-serif; background:transparent; color:#222; }
 .phone-input::placeholder { color:#bbb; font-size:.88rem; }
-.phone-wrap { margin-bottom:0; }
-
-/* ── BUTTON ── */
-.btn-sk {
-  display:block; width:100%; background:var(--sk-dark-red); color:#fff;
-  border:none; border-radius:25px; font-weight:800; font-size:.95rem;
-  padding:.75rem; cursor:pointer; transition:background .18s; letter-spacing:.3px;
-}
+.btn-sk { display:block; width:100%; background:var(--sk-dark-red); color:#fff; border:none; border-radius:25px; font-weight:800; font-size:.95rem; padding:.75rem; cursor:pointer; transition:background .18s; letter-spacing:.3px; }
 .btn-sk:hover { background:#7a0c10; }
-
-/* ── FOOTER ── */
 .sk-footer { background:#111; padding:1rem 2rem; }
 .sk-footer a { color:#888; text-decoration:none; font-size:.72rem; }
 .sk-footer a:hover { color:#fff; }
@@ -153,7 +50,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <nav class="sk-nav d-flex align-items-center gap-3">
   <a href="home.php" class="sk-logo">
     <small>EST. 1954</small>
@@ -175,7 +71,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
   </div>
 </nav>
 
-<!-- ── CONTENT ── -->
 <div class="auth-bg">
   <div class="auth-card">
     <h4 class="fw-black text-center mb-1" style="font-size:1.55rem;">Create a Shakey's Account</h4>
@@ -191,25 +86,23 @@ body { display:flex; flex-direction:column; min-height:100vh; }
     <?php endif; ?>
 
     <form method="POST" novalidate>
-      <!-- First + Last name -->
       <div class="row g-3 mb-0">
         <div class="col-6">
           <div class="field-wrap">
             <label>First name</label>
             <input type="text" name="first_name" placeholder="Enter your first name"
-                   value="<?= htmlspecialchars($_POST['first_name'] ?? '') ?>" required>
+                   value="<?= e($_POST['first_name'] ?? '') ?>" required>
           </div>
         </div>
         <div class="col-6">
           <div class="field-wrap">
             <label>Last name</label>
             <input type="text" name="last_name" placeholder="Enter your last name"
-                   value="<?= htmlspecialchars($_POST['last_name'] ?? '') ?>" required>
+                   value="<?= e($_POST['last_name'] ?? '') ?>" required>
           </div>
         </div>
       </div>
 
-      <!-- Mobile number -->
       <div>
         <label style="display:block;font-size:.76rem;font-weight:800;color:#444;margin-bottom:4px;letter-spacing:.3px;">Mobile number</label>
         <div class="phone-row">
@@ -221,18 +114,16 @@ body { display:flex; flex-direction:column; min-height:100vh; }
           </div>
           <input type="text" name="phone" class="phone-input" maxlength="10"
                  placeholder="Enter mobile number (Ex: 9171234567)"
-                 value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>" required>
+                 value="<?= e($_POST['phone'] ?? '') ?>" required>
         </div>
       </div>
 
-      <!-- Email -->
       <div class="field-wrap">
         <label>Email</label>
         <input type="email" name="email" placeholder="Enter your email address"
-               value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+               value="<?= e($_POST['email'] ?? '') ?>" required>
       </div>
 
-      <!-- Password + Confirm -->
       <div class="row g-3">
         <div class="col-6">
           <div class="field-wrap has-eye">
@@ -250,13 +141,11 @@ body { display:flex; flex-direction:column; min-height:100vh; }
         </div>
       </div>
 
-      <!-- Password hint -->
       <p class="text-center mb-3" style="font-size:.78rem;color:#4285F4;line-height:1.5;">
         Your password must be at least 6 characters long and must contain letters, numbers<br>
         and special characters. Cannot contain whitespace.
       </p>
 
-      <!-- Terms -->
       <div class="form-check mb-4">
         <input class="form-check-input" type="checkbox" name="agree" id="agree"
                style="accent-color:var(--sk-red);" <?= isset($_POST['agree']) ? 'checked' : '' ?>>
@@ -272,7 +161,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
   </div>
 </div>
 
-<!-- ── FOOTER ── -->
 <footer class="sk-footer">
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
     <div class="d-flex gap-3">
@@ -302,13 +190,8 @@ body { display:flex; flex-direction:column; min-height:100vh; }
 function toggleEye(inputId, iconId) {
   const inp = document.getElementById(inputId);
   const ico = document.getElementById(iconId);
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    ico.className = 'bi bi-eye-slash';
-  } else {
-    inp.type = 'password';
-    ico.className = 'bi bi-eye';
-  }
+  if (inp.type === 'password') { inp.type = 'text'; ico.className = 'bi bi-eye-slash'; }
+  else { inp.type = 'password'; ico.className = 'bi bi-eye'; }
 }
 </script>
 </body>

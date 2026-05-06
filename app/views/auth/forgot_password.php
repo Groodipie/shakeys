@@ -1,18 +1,3 @@
-<?php
-// forgot_password.php
-session_start();
-$sent = false; $error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once 'db.php';
-    $email = trim($_POST['email'] ?? '');
-    if ($email) {
-        $stmt = $pdo->prepare("SELECT Cust_ID FROM Customer WHERE Cust_Email = ?");
-        $stmt->execute([$email]);
-        // Always show success to prevent email enumeration
-        $sent = true;
-    } else { $error = 'Please enter your email address.'; }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Forgot Password — Shakey's Delivery</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
 :root{--sk-red:#C8181E;--sk-dark-red:#9B1015;}
 body{margin:0;}
@@ -46,7 +32,7 @@ body{margin:0;}
     <a href="login.php" class="btn btn-shakeys mt-2">Back to Login</a>
     <?php else: ?>
     <?php if ($error): ?>
-    <div class="alert alert-danger py-2" style="font-size:.85rem;"><?= htmlspecialchars($error) ?></div>
+    <div class="alert alert-danger py-2" style="font-size:.85rem;"><?= e($error) ?></div>
     <?php endif; ?>
     <form method="POST">
       <div class="mb-3">

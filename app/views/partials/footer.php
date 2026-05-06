@@ -20,7 +20,7 @@
       </div>
       <div class="col-md-4 text-center text-md-end" style="font-size:.75rem;">
         <div><i class="bi bi-telephone me-1"></i>Delivery Hotline: <strong class="text-warning">#77-777</strong></div>
-        <div class="mt-1 text-muted">&copy; <?=date('Y')?> Shakey's Pizza Parlor. All rights reserved.</div>
+        <div class="mt-1 text-muted">&copy; <?= date('Y') ?> Shakey's Pizza Parlor. All rights reserved.</div>
       </div>
     </div>
   </div>

@@ -1,37 +1,7 @@
-<?php
-// cart.php
-require_once 'includes/auth_check.php';
-$pageTitle = "Cart — Shakey's Delivery";
-session_start();
-
-// Update qty
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cart'])) {
-    foreach ($_POST['qty'] as $key => $qty) {
-        $qty = max(1, (int)$qty);
-        if (isset($_SESSION['cart'][$key])) $_SESSION['cart'][$key]['qty'] = $qty;
-    }
-    header('Location: cart.php'); exit;
-}
-
-// Remove item
-if (isset($_GET['remove'])) {
-    unset($_SESSION['cart'][$_GET['remove']]);
-    header('Location: cart.php'); exit;
-}
-
-$cart      = $_SESSION['cart'] ?? [];
-$subtotal  = 0;
-foreach ($cart as $item) $subtotal += $item['price'] * $item['qty'];
-$deliveryFee = $subtotal > 0 ? 60 : 0;
-$total       = $subtotal + $deliveryFee;
-
-include 'includes/header.php';
-?>
-
 <div class="container-fluid px-3 px-md-4 py-4">
   <h5 class="section-title mb-4">Your Cart</h5>
 
-  <?php if(empty($cart)): ?>
+  <?php if (empty($cart)): ?>
   <div class="bg-white rounded-4 p-5 text-center shadow-sm" style="max-width:480px;margin:0 auto;">
     <div style="font-size:4rem;" class="mb-3">🛒</div>
     <h5 class="fw-bold">Your cart is empty</h5>
@@ -41,19 +11,17 @@ include 'includes/header.php';
 
   <?php else: ?>
   <div class="row g-4">
-
-    <!-- Cart items -->
     <div class="col-lg-8">
       <form method="POST">
         <div class="bg-white rounded-4 overflow-hidden shadow-sm">
-          <?php foreach($cart as $key => $item):
+          <?php foreach ($cart as $key => $item):
             $itemTotal = $item['price'] * $item['qty'];
           ?>
           <div class="d-flex align-items-center gap-3 p-3 border-bottom">
             <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                  style="width:64px;height:64px;background:#fdf0f0;font-size:2.2rem;">🍕</div>
             <div class="flex-grow-1 min-w-0">
-              <h6 class="fw-bold mb-0 text-truncate" style="font-size:.9rem;"><?= htmlspecialchars($item['name']) ?></h6>
+              <h6 class="fw-bold mb-0 text-truncate" style="font-size:.9rem;"><?= e($item['name']) ?></h6>
               <small class="text-muted">₱<?= number_format($item['price'],2) ?> each</small>
             </div>
             <div class="d-flex align-items-center gap-2">
@@ -89,7 +57,6 @@ include 'includes/header.php';
       </form>
     </div>
 
-    <!-- Order summary -->
     <div class="col-lg-4">
       <div class="bg-white rounded-4 p-4 shadow-sm">
         <h6 class="fw-bold mb-3">Order Summary</h6>
@@ -116,7 +83,6 @@ include 'includes/header.php';
   <?php endif; ?>
 </div>
 
-<?php include 'includes/footer.php'; ?>
 <script>
 function changeQty(key, btn, delta) {
     const input = document.getElementById('qty_' + key);

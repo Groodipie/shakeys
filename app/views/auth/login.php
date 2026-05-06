@@ -1,36 +1,5 @@
 <?php
-// login.php
-session_start();
-if (isset($_SESSION['cust_id'])) { header('Location: home.php'); exit; }
-
-require_once 'db.php';
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email    = trim($_POST['email']    ?? '');
-    $password = trim($_POST['password'] ?? '');
-
-    if ($email && $password) {
-        $stmt = $pdo->prepare("SELECT * FROM Customer WHERE Cust_Email = ?");
-        $stmt->execute([$email]);
-        $customer = $stmt->fetch();
-
-        if ($customer && password_verify($password, $customer['Cust_Password'])) {
-            $_SESSION['cust_id']        = $customer['Cust_ID'];
-            $_SESSION['cust_firstname'] = $customer['Cust_FirstName'];
-            $_SESSION['cust_lastname']  = $customer['Cust_LastName'];
-            $_SESSION['cust_email']     = $customer['Cust_Email'];
-            $_SESSION['cust_phone']     = $customer['Cust_Phone'];
-            $_SESSION['cust_address']   = $customer['Cust_Address'];
-            header('Location: home.php'); exit;
-        } else {
-            $error = 'Invalid email or password.';
-        }
-    } else {
-        $error = 'Please fill in all fields.';
-    }
-}
-$postedEmail = htmlspecialchars($_POST['email'] ?? '');
+$postedEmail = e($_POST['email'] ?? '');
 $showStep2   = $error && !empty($_POST['password']);
 ?>
 <!DOCTYPE html>
@@ -46,82 +15,35 @@ $showStep2   = $error && !empty($_POST['password']);
 :root { --sk-red:#C8181E; --sk-dark-red:#9B1015; --sk-black:#1a1a1a; --sk-gold:#D4A017; }
 *,body { font-family:'Nunito',sans-serif; margin:0; }
 body { display:flex; flex-direction:column; min-height:100vh; }
-
-/* ── NAVBAR ── */
 .sk-nav { background:var(--sk-black); padding:.55rem 1.5rem; }
-.sk-logo {
-  width:58px; height:58px; border-radius:50%;
-  background:var(--sk-black); border:2.5px solid var(--sk-gold);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center; line-height:1.15; text-decoration:none; flex-shrink:0;
-}
+.sk-logo { width:58px; height:58px; border-radius:50%; background:var(--sk-black); border:2.5px solid var(--sk-gold); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; line-height:1.15; text-decoration:none; flex-shrink:0; }
 .sk-logo small { color:var(--sk-gold); font-size:5.5px; font-weight:700; letter-spacing:.8px; display:block; }
 .sk-logo span  { color:var(--sk-red);  font-size:12.5px; font-weight:900; font-family:Georgia,serif; }
 .nav-links a { color:#ccc; font-size:13px; font-weight:700; text-decoration:none; padding:6px 13px; transition:color .18s; white-space:nowrap; }
 .nav-links a:hover { color:#fff; }
 .btn-login-nav { background:var(--sk-red); color:#fff; border:none; border-radius:3px; font-size:13px; font-weight:700; padding:6px 18px; cursor:pointer; }
 .btn-login-nav:hover { background:var(--sk-dark-red); }
-
-/* ── BACKGROUND ── */
-.auth-bg {
-  flex:1;
-  background:#C8181E;
-  background-image:
-    radial-gradient(ellipse at 10% 60%, rgba(0,0,0,.22) 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 40%, rgba(0,0,0,.15) 0%, transparent 45%);
-  display:flex; align-items:center; justify-content:center;
-  padding:2.5rem 1rem; position:relative; overflow:hidden;
-}
-.auth-bg::after {
-  content:'🍕';
-  position:absolute; right:3%; top:50%; transform:translateY(-50%);
-  font-size:300px; opacity:.1; pointer-events:none; line-height:1;
-}
-
-/* ── CARD ── */
-.auth-card {
-  background:#fff; border-radius:4px;
-  padding:52px 48px; max-width:420px; width:100%;
-  box-shadow:0 12px 50px rgba(0,0,0,.22); position:relative; z-index:1;
-}
+.auth-bg { flex:1; background:#C8181E; background-image: radial-gradient(ellipse at 10% 60%, rgba(0,0,0,.22) 0%, transparent 45%), radial-gradient(ellipse at 90% 40%, rgba(0,0,0,.15) 0%, transparent 45%); display:flex; align-items:center; justify-content:center; padding:2.5rem 1rem; position:relative; overflow:hidden; }
+.auth-bg::after { content:'🍕'; position:absolute; right:3%; top:50%; transform:translateY(-50%); font-size:300px; opacity:.1; pointer-events:none; line-height:1; }
+.auth-card { background:#fff; border-radius:4px; padding:52px 48px; max-width:420px; width:100%; box-shadow:0 12px 50px rgba(0,0,0,.22); position:relative; z-index:1; }
 @media(max-width:480px){ .auth-card{ padding:36px 24px; } }
-
-/* ── UNDERLINE FIELDS ── */
 .field-wrap { margin-bottom:1.8rem; }
 .field-wrap label { display:block; font-size:.76rem; font-weight:800; color:#444; margin-bottom:4px; letter-spacing:.3px; }
-.field-wrap input {
-  display:block; width:100%; border:none; border-bottom:1.5px solid #d0d0d0;
-  outline:none; padding:.45rem 0; font-size:.9rem; font-family:'Nunito',sans-serif;
-  background:transparent; color:#222; transition:border-color .18s;
-}
+.field-wrap input { display:block; width:100%; border:none; border-bottom:1.5px solid #d0d0d0; outline:none; padding:.45rem 0; font-size:.9rem; font-family:'Nunito',sans-serif; background:transparent; color:#222; transition:border-color .18s; }
 .field-wrap input::placeholder { color:#bbb; font-size:.88rem; }
 .field-wrap input:focus { border-bottom-color:var(--sk-red); }
 .field-wrap.has-eye { position:relative; }
 .field-wrap.has-eye input { padding-right:28px; }
-.field-wrap .eye-btn {
-  position:absolute; right:2px; bottom:10px;
-  background:none; border:none; padding:0; cursor:pointer; color:#bbb; font-size:1rem; line-height:1;
-}
-
-/* ── BUTTONS ── */
-.btn-sk {
-  display:block; width:100%; background:var(--sk-dark-red); color:#fff;
-  border:none; border-radius:25px; font-weight:800; font-size:.95rem;
-  padding:.75rem; cursor:pointer; transition:background .18s; letter-spacing:.3px;
-}
+.field-wrap .eye-btn { position:absolute; right:2px; bottom:10px; background:none; border:none; padding:0; cursor:pointer; color:#bbb; font-size:1rem; line-height:1; }
+.btn-sk { display:block; width:100%; background:var(--sk-dark-red); color:#fff; border:none; border-radius:25px; font-weight:800; font-size:.95rem; padding:.75rem; cursor:pointer; transition:background .18s; letter-spacing:.3px; }
 .btn-sk:hover { background:#7a0c10; }
 .btn-fb { background:#1877f2; color:#fff; border:none; border-radius:25px; font-weight:700; font-size:.88rem; padding:.62rem 1rem; cursor:pointer; width:100%; }
 .btn-fb:hover { background:#1466d8; }
 .btn-gg { background:#fff; color:#444; border:1.5px solid #ddd; border-radius:25px; font-weight:700; font-size:.88rem; padding:.62rem 1rem; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; }
 .btn-gg:hover { background:#f5f5f5; }
-
-/* ── DIVIDER ── */
 .or-divider { display:flex; align-items:center; gap:10px; margin:1.4rem 0 1rem; }
 .or-divider::before,.or-divider::after { content:''; flex:1; height:1px; background:#eee; }
 .or-divider span { font-size:.78rem; color:#aaa; white-space:nowrap; }
-
-/* ── FOOTER ── */
 .sk-footer { background:#111; padding:1rem 2rem; }
 .sk-footer a { color:#888; text-decoration:none; font-size:.72rem; }
 .sk-footer a:hover { color:#fff; }
@@ -132,7 +54,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <nav class="sk-nav d-flex align-items-center gap-3">
   <a href="home.php" class="sk-logo">
     <small>EST. 1954</small>
@@ -154,7 +75,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
   </div>
 </nav>
 
-<!-- ── CONTENT ── -->
 <div class="auth-bg">
   <div class="auth-card">
     <h4 class="fw-black text-center mb-1" style="font-size:1.55rem;">Login to Shakey's</h4>
@@ -163,12 +83,10 @@ body { display:flex; flex-direction:column; min-height:100vh; }
     </p>
 
     <?php if ($error): ?>
-    <div class="alert alert-danger py-2 text-center mb-3" style="font-size:.84rem;border-radius:4px;"><?= htmlspecialchars($error) ?></div>
+    <div class="alert alert-danger py-2 text-center mb-3" style="font-size:.84rem;border-radius:4px;"><?= e($error) ?></div>
     <?php endif; ?>
 
     <form method="POST" id="loginForm" novalidate>
-
-      <!-- Step 1: Email -->
       <div id="step1" <?= $showStep2 ? 'style="display:none"' : '' ?>>
         <div class="field-wrap">
           <label>Email address</label>
@@ -186,7 +104,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
         </div>
       </div>
 
-      <!-- Step 2: Password -->
       <div id="step2" <?= $showStep2 ? '' : 'style="display:none"' ?>>
         <p class="mb-3" style="font-size:.85rem;color:#555;">
           <button type="button" onclick="goBack()" style="background:none;border:none;padding:0;color:var(--sk-red);font-size:.85rem;cursor:pointer;font-weight:700;">
@@ -208,7 +125,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
           <a href="forgot_password.php" style="color:var(--sk-red);font-size:.82rem;font-weight:700;text-decoration:none;">Forgot password?</a>
         </div>
       </div>
-
     </form>
 
     <div class="or-divider"><span>Login with</span></div>
@@ -223,7 +139,6 @@ body { display:flex; flex-direction:column; min-height:100vh; }
   </div>
 </div>
 
-<!-- ── FOOTER ── -->
 <footer class="sk-footer">
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
     <div class="d-flex gap-3">
@@ -270,13 +185,8 @@ function goBack() {
 function togglePass() {
   const inp = document.getElementById('passInput');
   const ico = document.getElementById('eyeIcon');
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    ico.className = 'bi bi-eye-slash';
-  } else {
-    inp.type = 'password';
-    ico.className = 'bi bi-eye';
-  }
+  if (inp.type === 'password') { inp.type = 'text'; ico.className = 'bi bi-eye-slash'; }
+  else { inp.type = 'password'; ico.className = 'bi bi-eye'; }
 }
 </script>
 </body>

@@ -1,18 +1,16 @@
 <?php
-// includes/header.php
-if (session_status() === PHP_SESSION_NONE) session_start();
 $cart      = $_SESSION['cart']     ?? [];
 $cartCount = array_sum(array_column($cart, 'qty'));
 $isLogged  = isset($_SESSION['cust_id']);
 $firstName = $_SESSION['cust_firstname'] ?? '';
-$base      = (strpos($_SERVER['PHP_SELF'], '/includes/') !== false) ? '../' : '';
+$current   = $current ?? basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= $pageTitle ?? "Shakey's Delivery" ?></title>
+<title><?= e($pageTitle ?? "Shakey's Delivery") ?></title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
@@ -29,8 +27,6 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .cat-bar{background:#2a0505;overflow-x:auto;white-space:nowrap;padding:.15rem 1rem;}
 .cat-bar a{color:#ddd;font-size:.82rem;padding:.65rem 1.1rem;display:inline-block;text-decoration:none;border-bottom:2px solid transparent;transition:all .2s;}
 .cat-bar a:hover,.cat-bar a.active{color:var(--sk-gold);border-bottom-color:var(--sk-gold);}
-.auth-wrapper{min-height:100vh;background:radial-gradient(ellipse at top,#8b0000 0%,var(--sk-red) 50%,#a01010 100%);display:flex;align-items:center;justify-content:center;padding:2rem;}
-.auth-card{background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:480px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.3);}
 .btn-shakeys{background:var(--sk-dark-red);color:#fff;border:none;border-radius:8px;font-weight:700;padding:.75rem;}
 .btn-shakeys:hover{background:#7a0c10;color:#fff;}
 .food-card{background:#fff;border-radius:12px;border:1px solid #eee;transition:transform .2s,box-shadow .2s;height:100%;}
@@ -53,7 +49,7 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 <?php if($isLogged): ?>
 <nav class="navbar navbar-expand-lg navbar-shakeys sticky-top">
   <div class="container-fluid px-3">
-    <a class="brand-badge me-3" href="<?=$base?>home.php">
+    <a class="brand-badge me-3" href="home.php">
       <span class="est">EST. 1954</span>
       <span class="name">Shakey's</span>
       <span class="sub">PIZZA PARLOR</span>
@@ -64,29 +60,40 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
     <div class="collapse navbar-collapse" id="navMain">
       <ul class="navbar-nav me-auto gap-1">
         <?php
-        $cur=$current??basename($_SERVER['PHP_SELF']);
-        $links=['home.php'=>'Home','menu.php'=>'Menu','promos.php'=>'Promos','order_tracking.php'=>'Order Tracking','account.php'=>'Supercard','book_party.php'=>'Book a Party'];
-        foreach($links as $f=>$l):$a=($cur===$f)?'active':'';?>
-        <li class="nav-item"><a class="nav-link <?=$a?>" href="<?=$base.$f?>"><?=$l?></a></li>
-        <?php endforeach;?>
+        $links = [
+          'home.php'           => 'Home',
+          'menu.php'           => 'Menu',
+          'promos.php'         => 'Promos',
+          'order_tracking.php' => 'Order Tracking',
+          'account.php'        => 'Supercard',
+          'book_party.php'     => 'Book a Party',
+        ];
+        foreach ($links as $f => $l):
+          $active = ($current === $f) ? 'active' : '';
+        ?>
+        <li class="nav-item"><a class="nav-link <?= $active ?>" href="<?= $f ?>"><?= $l ?></a></li>
+        <?php endforeach; ?>
       </ul>
       <div class="d-flex align-items-center gap-3">
-        <a href="<?=$base?>account.php" class="text-white text-decoration-none d-flex align-items-center gap-2" style="font-size:.88rem;">
-          Hi, <?=htmlspecialchars($firstName)?>!
-          <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:var(--sk-red);color:#fff;font-size:.85rem;"><?=strtoupper($firstName[0]??'U')?></div>
+        <a href="account.php" class="text-white text-decoration-none d-flex align-items-center gap-2" style="font-size:.88rem;">
+          Hi, <?= e($firstName) ?>!
+          <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:var(--sk-red);color:#fff;font-size:.85rem;"><?= e(strtoupper($firstName[0] ?? 'U')) ?></div>
         </a>
-        <a href="<?=$base?>cart.php" class="position-relative text-decoration-none">
+        <a href="cart.php" class="position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5 text-white"></i>
-          <?php if($cartCount>0):?><span class="cart-badge"><?=$cartCount?></span><?php endif;?>
+          <?php if ($cartCount > 0): ?><span class="cart-badge"><?= $cartCount ?></span><?php endif; ?>
         </a>
       </div>
     </div>
   </div>
 </nav>
 <div class="cat-bar">
-  <?php $cats=['Promos','Supercard Exclusives','Pizza','Group Meals',"Chicken 'N Mojos",'Combos','Hero Sandwiches','Pasta','Sides','Salad','Desserts','Drinks'];
-  foreach($cats as $c):$a=(isset($_GET['category'])&&$_GET['category']==$c)?'active':'';?>
-  <a href="<?=$base?>menu.php?category=<?=urlencode($c)?>" class="<?=$a?>"><?=$c?></a>
-  <?php endforeach;?>
+  <?php
+  $cats = ['Promos','Supercard Exclusives','Pizza','Group Meals',"Chicken 'N Mojos",'Combos','Hero Sandwiches','Pasta','Sides','Salad','Desserts','Drinks'];
+  foreach ($cats as $c):
+    $active = (isset($_GET['category']) && $_GET['category'] === $c) ? 'active' : '';
+  ?>
+  <a href="menu.php?category=<?= urlencode($c) ?>" class="<?= $active ?>"><?= e($c) ?></a>
+  <?php endforeach; ?>
 </div>
-<?php endif;?>
+<?php endif; ?>
