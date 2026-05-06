@@ -1,0 +1,116 @@
+/* assets/css/style.css — Shakey's Delivery */
+
+:root {
+  --sk-red:      #C8181E;
+  --sk-dark-red: #9B1015;
+  --sk-black:    #1a1a1a;
+  --sk-gold:     #D4A017;
+  --sk-bg:       #f5f5f5;
+}
+
+* { font-family: 'Nunito', sans-serif; }
+
+/* ── NAVBAR ──────────────────────────────────── */
+.sk-navbar { background: var(--sk-black); border-bottom: 2px solid #2a2a2a; }
+
+.sk-logo-badge {
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--sk-black); border: 3px solid var(--sk-gold);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; line-height: 1.1;
+}
+.sk-logo-badge small { color: var(--sk-gold); font-size: 6px; font-weight: 700; letter-spacing: 1px; }
+.sk-logo-badge span  { color: var(--sk-red);  font-size: 13px; font-weight: 900; font-family: Georgia, serif; }
+
+.sk-nav-link { color: #ccc !important; font-size: 13px; font-weight: 600; padding: 6px 10px !important; border-radius: 6px; transition: all .2s; border-bottom: 2px solid transparent; }
+.sk-nav-link:hover, .sk-nav-link.active { color: var(--sk-gold) !important; border-bottom-color: var(--sk-gold); }
+
+.sk-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--sk-red); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
+}
+
+/* ── CATEGORY STRIP ─────────────────────────── */
+.sk-cat-strip { background: #2a0505; padding: 0 0; overflow-x: auto; white-space: nowrap; }
+.sk-cat-link  { display: inline-block; color: #ddd; font-size: 13px; font-weight: 600; padding: 11px 20px; text-decoration: none; border-bottom: 2px solid transparent; transition: all .2s; }
+.sk-cat-link:hover { color: var(--sk-gold); border-bottom-color: var(--sk-gold); }
+
+/* ── BUTTONS ─────────────────────────────────── */
+.sk-btn-red          { background: var(--sk-red);  color: #fff; border: none; font-weight: 700; }
+.sk-btn-red:hover    { background: var(--sk-dark-red); color: #fff; }
+.sk-btn-outline-red  { background: transparent; color: var(--sk-red); border: 2px solid var(--sk-red); font-weight: 700; }
+.sk-btn-outline-red:hover { background: var(--sk-red); color: #fff; }
+.sk-btn-gold         { background: var(--sk-gold); color: #1a1a1a; border: none; font-weight: 700; }
+
+/* ── HERO BANNER ─────────────────────────────── */
+.sk-hero { border-radius: 14px; overflow: hidden; min-height: 240px; }
+.sk-hero-slide { display: none; padding: 48px 52px; }
+.sk-hero-slide.active { display: flex; align-items: center; justify-content: space-between; }
+.sk-hero-dots { display: flex; justify-content: center; gap: 8px; padding: 12px 0; background: var(--sk-bg); }
+.sk-hero-dot  { width: 8px; height: 8px; border-radius: 4px; background: #ccc; border: none; cursor: pointer; transition: all .3s; padding: 0; }
+.sk-hero-dot.active { width: 24px; background: var(--sk-red); }
+
+/* ── PRODUCT CARD ───────────────────────────── */
+.sk-product-card { border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: transform .2s, box-shadow .2s; cursor: pointer; background: #fff; }
+.sk-product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.sk-product-thumb { background: #fdf0f0; height: 130px; display: flex; align-items: center; justify-content: center; font-size: 58px; }
+.sk-product-price { color: var(--sk-red); font-weight: 800; font-size: 16px; }
+.sk-badge-avail   { background: #eef9ee; color: #27500A; font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
+.sk-badge-unavail { background: #eee; color: #888; font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
+
+/* ── PROMO CARDS ────────────────────────────── */
+.sk-promo-card { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #eee; transition: box-shadow .2s; }
+.sk-promo-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+.sk-promo-code { background: #fdf0f0; border: 1px dashed var(--sk-red); border-radius: 6px; padding: 5px 12px; font-family: monospace; font-weight: 700; color: var(--sk-red); font-size: 13px; }
+
+/* ── AUTH PAGES ─────────────────────────────── */
+.sk-auth-bg { background: radial-gradient(ellipse at top, #8b0000 0%, var(--sk-red) 50%, #a01010 100%); min-height: 100vh; }
+.sk-auth-card { background: #fff; border-radius: 16px; padding: 44px 40px; box-shadow: 0 24px 80px rgba(0,0,0,.3); }
+
+/* ── ORDER TRACKING ─────────────────────────── */
+.sk-status-timeline { position: relative; padding-left: 32px; }
+.sk-status-timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: #eee; }
+.sk-status-step { position: relative; padding: 0 0 20px 20px; }
+.sk-status-step .sk-step-dot { position: absolute; left: -28px; top: 4px; width: 18px; height: 18px; border-radius: 50%; background: #ccc; border: 3px solid #fff; box-shadow: 0 0 0 2px #ccc; }
+.sk-status-step.done .sk-step-dot  { background: #22c55e; box-shadow: 0 0 0 2px #22c55e; }
+.sk-status-step.current .sk-step-dot { background: var(--sk-red); box-shadow: 0 0 0 2px var(--sk-red); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+/* ── CART / CHECKOUT ────────────────────────── */
+.sk-cart-item { background: #fff; border-radius: 10px; padding: 16px; border: 1px solid #eee; }
+.sk-order-summary { background: #fff; border-radius: 12px; padding: 24px; border: 1px solid #eee; position: sticky; top: 90px; }
+.sk-payment-option { border: 2px solid #eee; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all .2s; }
+.sk-payment-option:hover, .sk-payment-option.selected { border-color: var(--sk-red); background: #fdf0f0; }
+
+/* ── ACCOUNT PAGE ───────────────────────────── */
+.sk-account-header { background: var(--sk-gold); border-radius: 16px 16px 0 0; padding: 28px 32px; text-align: center; }
+.sk-account-body   { background: #fff; border-radius: 0 0 16px 16px; border: 1px solid #eee; padding: 28px 32px; }
+.sk-info-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+.sk-info-row:last-child { border-bottom: none; }
+
+/* ── BOOKING PAGE ───────────────────────────── */
+.sk-booking-card { background: #fff; border-radius: 14px; padding: 32px; border: 1px solid #eee; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+
+/* ── SUPERCARD BANNER ───────────────────────── */
+.sk-supercard-banner { background: linear-gradient(135deg, #1a1a1a 60%, #3a0a0a); border-radius: 12px; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; }
+
+/* ── FOOTER ─────────────────────────────────── */
+.sk-footer { background: #111; color: #ccc; }
+
+/* ── MISC ───────────────────────────────────── */
+.sk-section-title { font-size: 20px; font-weight: 800; color: #222; }
+.sk-tag { font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 700; }
+.sk-tag-red    { background: var(--sk-red); color: #fff; }
+.sk-tag-gold   { background: var(--sk-gold); color: #1a1a1a; }
+.sk-tag-green  { background: #22c55e; color: #fff; }
+.text-sk-red   { color: var(--sk-red) !important; }
+.text-sk-gold  { color: var(--sk-gold) !important; }
+.bg-sk-red     { background: var(--sk-red) !important; }
+.bg-sk-black   { background: var(--sk-black) !important; }
+.border-sk-red { border-color: var(--sk-red) !important; }
+
+/* Scrollbar for cat strip */
+.sk-cat-strip::-webkit-scrollbar { height: 0; }
