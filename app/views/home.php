@@ -1,5 +1,20 @@
 <?php
 $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤','Bundle'=>'🎉','Sides'=>'🍟','Default'=>'🍽️'];
+
+// Product descriptions keyed by Prod_Name (case-insensitive lookup below).
+$descMap = [
+  "manager's choice"    => "Shakey's no. 1 pizza. Ham, beef, Italian sausage, green bell pepper and onions.",
+  "pepperoni"           => "Fully-loaded for that sumptuous pepperoni taste.",
+  "shakey's special"    => "Loaded with beef, Italian sausage, pepperoni, salami, mushrooms, green bell pepper, and onions.",
+  "belly buster"        => "11 toppings: beef, Italian sausage, pepperoni, ham, salami, salami bits, mushrooms, red & green bell pepper, and onions.",
+  "truffle four cheese" => "Irresistibly rich and creamy pizza topped with four types of cheese: Mozzarella, Parmesan, Cheddar and Truffle.",
+  "hawaiian"            => "Sweet pineapple chunks and savory ham — the classic crowd favorite.",
+  "garlic 'n cheese"    => "A simple but satisfying blend of garlic and melted mozzarella cheese.",
+];
+$descFor = function(array $prod) use ($descMap) {
+  $key = strtolower(trim($prod['Prod_Name'] ?? ''));
+  return $descMap[$key] ?? ($prod['Prod_Category'] ?? '');
+};
 ?>
 
 <div class="container-fluid px-3 px-md-4 py-3">
@@ -160,56 +175,109 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
   </script>
 
   <!-- Recommended -->
-  <h5 class="section-title mb-3">Recommended for you</h5>
-  <div class="row g-3 mb-4">
-    <?php foreach ($recommended as $prod):
-      $emoji = $emojiMap[$prod['Prod_Type']] ?? $emojiMap['Default'];
-    ?>
-    <div class="col-6 col-md-3">
-      <div class="food-card">
-        <div class="thumb"><?= $emoji ?></div>
-        <div class="p-3">
-          <h6 class="fw-bold mb-1" style="font-size:.9rem;"><?= e($prod['Prod_Name']) ?></h6>
-          <p class="text-muted mb-2" style="font-size:.78rem;"><?= e($prod['Prod_Category']) ?></p>
-          <div class="d-flex align-items-center justify-content-between">
-            <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
-            <form method="POST" action="add_to_cart.php">
-              <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
-              <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
-              <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
-              <input type="hidden" name="redirect"   value="home.php">
-              <button type="submit" class="btn btn-sm fw-bold" style="background:var(--sk-red);color:#fff;border-radius:6px;font-size:.78rem;">Add</button>
-            </form>
+  <section class="home-section mb-5 pb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="section-title mb-0">Recommended for you</h5>
+    </div>
+    <div class="row g-3">
+      <?php foreach ($recommended as $prod):
+        $emoji = $emojiMap[$prod['Prod_Type']] ?? $emojiMap['Default'];
+      ?>
+      <div class="col-12 col-md-4">
+        <div class="food-card food-card-h">
+          <div class="thumb"><?= $emoji ?></div>
+          <div class="body">
+            <h6 class="title"><?= e($prod['Prod_Name']) ?></h6>
+            <p class="desc"><?= e($descFor($prod)) ?></p>
+            <div class="foot">
+              <div>
+                <p class="starts">Starts at</p>
+                <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
+              </div>
+              <form method="POST" action="add_to_cart.php">
+                <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
+                <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
+                <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
+                <input type="hidden" name="redirect"   value="home.php">
+                <button type="submit" class="order-btn">ORDER</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
+      <?php endforeach; ?>
     </div>
-    <?php endforeach; ?>
-  </div>
+  </section>
 
-  <!-- Pizzas -->
-  <h5 class="section-title mb-3">Our Pizzas</h5>
-  <div class="row g-3 mb-5">
-    <?php foreach ($pizzas as $prod): ?>
-    <div class="col-6 col-md-4 col-lg-2">
-      <div class="food-card">
-        <div class="thumb">🍕</div>
-        <div class="p-3">
-          <h6 class="fw-bold mb-1" style="font-size:.85rem;"><?= e($prod['Prod_Name']) ?></h6>
-          <div class="d-flex align-items-center justify-content-between mt-2">
-            <span class="price" style="font-size:.9rem;">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
-            <form method="POST" action="add_to_cart.php">
-              <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
-              <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
-              <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
-              <input type="hidden" name="redirect"   value="home.php">
-              <button type="submit" class="btn btn-sm fw-bold" style="background:var(--sk-red);color:#fff;border-radius:6px;font-size:.75rem;padding:.25rem .6rem;">Add</button>
-            </form>
+  <!-- Featured products -->
+  <section class="home-section mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="section-title mb-0">Featured products</h5>
+      <a href="menu.php" class="view-menu-link">VIEW MENU</a>
+    </div>
+    <div class="row g-3">
+      <?php foreach ($featured as $prod): ?>
+      <div class="col-12 col-md-4">
+        <div class="food-card food-card-h">
+          <div class="thumb">🍕</div>
+          <div class="body">
+            <h6 class="title"><?= e($prod['Prod_Name']) ?></h6>
+            <p class="desc"><?= e($descFor($prod)) ?></p>
+            <div class="foot">
+              <div>
+                <p class="starts">Starts at</p>
+                <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
+              </div>
+              <form method="POST" action="add_to_cart.php">
+                <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
+                <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
+                <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
+                <input type="hidden" name="redirect"   value="home.php">
+                <button type="submit" class="order-btn">ORDER</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
+      <?php endforeach; ?>
     </div>
-    <?php endforeach; ?>
-  </div>
+  </section>
+
+  <!-- Supercard CTA banner -->
+  <section class="home-section mt-5 mb-4">
+    <a href="account.php" class="supercard-cta">
+      <div class="supercard-cta-art supercard-cta-art-left"></div>
+      <div class="supercard-cta-art supercard-cta-art-right"></div>
+      <div class="supercard-cta-body">
+        <h3 class="supercard-cta-title">Free Pizza. Chicken. <span class="hl">Plus</span> More!</h3>
+        <p class="supercard-cta-sub">Supercard Members enjoy these benefits from Shakey's and Peri-Peri Charcoal Chicken and Sauce Bar.</p>
+      </div>
+      <span class="supercard-cta-btn">KNOW MORE</span>
+    </a>
+  </section>
+
+  <!-- Explore More -->
+  <section class="home-section mb-2">
+    <h5 class="section-title mb-3">Explore More</h5>
+    <div class="app-promo">
+      <div class="app-promo-body">
+        <h4 class="app-promo-title">Download the NEW Shakey's Super App!</h4>
+        <p class="app-promo-desc">Get the new Shakey's Super App for seamless order experience plus get to know more about our products and promo!</p>
+        <div class="app-promo-actions">
+          <a href="#" class="store-btn" aria-label="Get it on Google Play">
+            <img src="https://www.shakeyspizza.ph/images/explore-more/google-play-lq.png" alt="Get it on Google Play">
+          </a>
+          <a href="#" class="store-btn" aria-label="Download on the App Store">
+            <img src="https://www.shakeyspizza.ph/images/explore-more/app-store-lq.png" alt="Download on the App Store">
+          </a>
+          <img src="https://www.shakeyspizza.ph/images/explore-more/qr-code.png" alt="Super App QR code" class="app-qr">
+        </div>
+      </div>
+      <div class="app-promo-art">
+        <img src="https://www.shakeyspizza.ph/images/explore-more/gta-home.png" alt="Shakey's Super App home screen" class="app-phone app-phone-1">
+        <img src="https://www.shakeyspizza.ph/images/explore-more/gta-rider.png" alt="Shakey's Super App rider tracking" class="app-phone app-phone-2">
+      </div>
+    </div>
+  </section>
 
 </div>

@@ -7,10 +7,10 @@ $pageTitle = "Home — Shakey's Delivery";
 $products    = new Product($pdo);
 $promotions  = new Promotion($pdo);
 
-$recommended  = $products->recommended(4);
+$recommended  = $products->recommended(3);
 $activePromos = $promotions->active(3);
-$pizzas       = $products->byType('Pizza', 6);
+$featured     = $products->byType('Pizza', 5);
 
 partial('header', ['pageTitle' => $pageTitle]);
-view('home', compact('recommended', 'activePromos', 'pizzas'));
+view('home', compact('recommended', 'activePromos', 'featured'));
 partial('footer');
