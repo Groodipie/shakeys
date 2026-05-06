@@ -4,65 +4,160 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
 
 <div class="container-fluid px-3 px-md-4 py-3">
 
-  <!-- Hero Banner Carousel -->
-  <div id="heroBanner" class="carousel slide mb-4 rounded-3 overflow-hidden" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <?php foreach ($activePromos as $i => $p): ?>
-      <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
-        <div class="hero-banner d-flex align-items-center justify-content-between" style="min-height:220px;">
-          <div style="flex:1;">
-            <p class="fw-bold mb-1" style="color:var(--sk-gold);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;">
-              <?= e($p['Promo_Category']) ?>
-            </p>
-            <h2 class="display-6 fw-black mb-2" style="font-family:Georgia,serif;color:#fff;">
-              <?= e($p['Promo_Code']) ?>
-            </h2>
-            <p class="text-secondary mb-3" style="font-size:.9rem;"><?= e($p['Promo_Description']) ?></p>
-            <div class="d-flex align-items-center gap-3">
-              <span style="color:var(--sk-gold);font-size:2rem;font-weight:900;">
-                <?= $p['Promo_Discount'] === 'Fixed' ? '₱'.number_format($p['Promo_DiscountValue'],2).' OFF' : $p['Promo_DiscountValue'].'% OFF' ?>
-              </span>
-              <a href="menu.php?category=Promos" class="btn px-4 py-2 fw-bold" style="background:var(--sk-red);color:#fff;border-radius:8px;">Order Now</a>
+  <!-- Hero Banner Carousel (peek style) -->
+  <?php
+  // Image-based banner slides. Drop banner images into public/assets/img/promos/
+  $bannerSlides = [
+    ['image' => 'assets/img/promos/hbo.png',          'alt' => 'H·B·O — Home Bonding Offer ₱999', 'href' => 'menu.php?category=Promos'],
+    ['image' => 'assets/img/promos/late-night.png',   'alt' => 'Satisfy your late night cravings', 'href' => 'menu.php?category=Promos'],
+    ['image' => 'assets/img/promos/supercard.png',    'alt' => 'Shakey\'s Supercard — Free Pizza & More', 'href' => 'promos.php'],
+    ['image' => 'assets/img/promos/banner4.png',      'alt' => 'Shakey\'s Promo', 'href' => 'promos.php'],
+    ['image' => 'assets/img/promos/banner5.png',      'alt' => 'Shakey\'s Promo', 'href' => 'promos.php'],
+    ['image' => 'assets/img/promos/banner6.png',      'alt' => 'Shakey\'s Promo', 'href' => 'promos.php'],
+    ['image' => 'assets/img/promos/banner7.png',      'alt' => 'Shakey\'s Promo', 'href' => 'promos.php'],
+    ['image' => 'assets/img/promos/banner8.png',      'alt' => 'Shakey\'s Promo', 'href' => 'promos.php'],
+  ];
+  $heroThemes = [
+    ['t'=>'late',  'emoji'=>'🍕'],
+    ['t'=>'hbo',   'emoji'=>'🍗'],
+    ['t'=>'super', 'emoji'=>'🎉'],
+  ];
+  // Build final slide list: image banners first, then any active DB promos as themed text slides.
+  $textSlides = [];
+  foreach ($activePromos ?? [] as $i => $p) {
+    $textSlides[] = $p;
+  }
+  $totalSlides = count($bannerSlides) + count($textSlides);
+  ?>
+  <div class="bigcar mt-4 mb-4">
+    <button type="button" class="bigcar-arrow bigcar-prev" aria-label="Previous slide">&#8249;</button>
+    <div class="bigcar-viewport">
+      <div class="bigcar-track" id="bigcarTrack">
+        <?php foreach ($bannerSlides as $i => $b):
+          $imgPath = __DIR__ . '/../../public/' . $b['image'];
+          $hasImage = file_exists($imgPath);
+        ?>
+        <a href="<?= e($b['href']) ?>" class="bigcar-slide bigcar-slide-img <?= $hasImage ? '' : 'bigcar-slide-missing' ?>"<?= $hasImage ? ' style="background-image:url(\''.e($b['image']).'\');"' : '' ?>>
+          <?php if (!$hasImage): ?>
+            <div class="bigcar-placeholder">
+              <div class="bigcar-placeholder-icon">🖼️</div>
+              <div class="bigcar-placeholder-text">Add image at<br><code>public/<?= e($b['image']) ?></code></div>
+            </div>
+          <?php else: ?>
+            <span class="visually-hidden"><?= e($b['alt']) ?></span>
+          <?php endif; ?>
+        </a>
+        <?php endforeach; ?>
+        <?php foreach ($textSlides as $i => $p):
+          $th = $heroThemes[$i % count($heroThemes)];
+          $isFixed   = ($p['Promo_Discount'] ?? '') === 'Fixed';
+          $headline  = $isFixed ? '₱'.number_format($p['Promo_DiscountValue'], 0).' OFF' : intval($p['Promo_DiscountValue']).'% OFF';
+          $saveLabel = $isFixed ? 'Limited Time' : 'Save Big';
+        ?>
+        <div class="bigcar-slide bigcar-theme-<?= $th['t'] ?>">
+          <div class="bigcar-deco bigcar-deco-tl"></div>
+          <div class="bigcar-deco bigcar-deco-br"></div>
+          <div class="bigcar-content">
+            <p class="bigcar-eyebrow"><?= e($p['Promo_Category']) ?></p>
+            <h2 class="bigcar-title"><?= e($p['Promo_Code']) ?></h2>
+            <p class="bigcar-desc"><?= e($p['Promo_Description']) ?></p>
+            <div class="bigcar-cta">
+              <?php if ($headline): ?><span class="bigcar-price"><?= $headline ?></span><?php endif; ?>
+              <span class="bigcar-save"><?= e($saveLabel) ?></span>
+              <a href="menu.php?category=Promos" class="bigcar-btn">Order Now</a>
             </div>
           </div>
-          <div class="d-none d-md-flex align-items-center justify-content-center" style="width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);font-size:5rem;">🍕</div>
+          <div class="bigcar-art"><?= $th['emoji'] ?></div>
         </div>
+        <?php endforeach; ?>
       </div>
-      <?php endforeach; ?>
-      <?php if (empty($activePromos)): ?>
-      <div class="carousel-item active">
-        <div class="hero-banner d-flex align-items-center justify-content-between" style="min-height:220px;">
-          <div>
-            <p class="fw-bold mb-1" style="color:var(--sk-gold);font-size:.85rem;letter-spacing:2px;">DELIVERY EXCLUSIVE</p>
-            <h2 class="display-6 fw-black mb-2" style="font-family:Georgia,serif;color:#fff;">H·B·O</h2>
-            <p class="text-secondary mb-3" style="font-size:.9rem;">Home Bonding Offer — 1 Large Pizza + 4pcs Chicken + Garlic Bread + 1.5L Coke</p>
-            <div class="d-flex align-items-center gap-3">
-              <span style="color:var(--sk-gold);font-size:2rem;font-weight:900;">₱999</span>
-              <span class="badge px-3 py-2" style="background:var(--sk-red);font-size:.8rem;">Save ₱689</span>
-            </div>
-          </div>
-          <div class="d-none d-md-flex align-items-center justify-content-center" style="width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);font-size:5rem;">🍕</div>
-        </div>
-      </div>
-      <?php endif; ?>
     </div>
-    <?php if (count($activePromos) > 1): ?>
-    <div class="carousel-indicators" style="bottom:-30px;">
-      <?php for ($i = 0; $i < count($activePromos); $i++): ?>
-      <button type="button" data-bs-target="#heroBanner" data-bs-slide-to="<?= $i ?>" <?= $i === 0 ? 'class="active"' : '' ?> style="width:8px;height:8px;border-radius:50%;background:var(--sk-red);"></button>
+    <button type="button" class="bigcar-arrow bigcar-next" aria-label="Next slide">&#8250;</button>
+    <?php if ($totalSlides > 1): ?>
+    <div class="bigcar-dots" id="bigcarDots">
+      <?php for ($i = 0; $i < $totalSlides; $i++): ?>
+      <button type="button" class="bigcar-dot <?= $i === 0 ? 'active' : '' ?>" data-i="<?= $i ?>" aria-label="Go to slide <?= $i+1 ?>"></button>
       <?php endfor; ?>
     </div>
     <?php endif; ?>
   </div>
+  <script>
+  (function(){
+    const track = document.getElementById('bigcarTrack');
+    if(!track) return;
+    const originals = [...track.querySelectorAll('.bigcar-slide')];
+    const total = originals.length;
+    if(total === 0) return;
 
-  <!-- Supercard Banner -->
-  <div class="supercard-bar mb-4">
-    <div>
-      <h6 class="fw-bold mb-0" style="color:var(--sk-gold);">Free Pizza. Chicken. <span style="color:var(--sk-red);">Plus</span> More!</h6>
-      <small class="text-secondary">Supercard Members enjoy exclusive benefits from Shakey's.</small>
-    </div>
-    <a href="promos.php" class="btn btn-sm fw-bold" style="border:2px solid #ccc;color:#ccc;background:none;">KNOW MORE</a>
-  </div>
+    // Clone last and first slides for infinite peek loop
+    if(total > 1){
+      const firstClone = originals[0].cloneNode(true);
+      const lastClone  = originals[total - 1].cloneNode(true);
+      firstClone.setAttribute('aria-hidden', 'true');
+      lastClone.setAttribute('aria-hidden',  'true');
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, originals[0]);
+    }
+
+    const slides = [...track.querySelectorAll('.bigcar-slide')];
+    const dots   = document.querySelectorAll('#bigcarDots .bigcar-dot');
+    const prev   = document.querySelector('.bigcar-prev');
+    const next   = document.querySelector('.bigcar-next');
+    let idx = total > 1 ? 1 : 0;  // first real slide
+    let busy = false;
+
+    function realIdx(){
+      if(total <= 1) return 0;
+      if(idx === 0)            return total - 1;
+      if(idx === total + 1)    return 0;
+      return idx - 1;
+    }
+    function layout(animate){
+      const slideW = slides[0].offsetWidth;             // unscaled layout width
+      const viewW  = track.parentElement.offsetWidth;   // viewport width
+      const gap    = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+      const offset = (viewW - slideW) / 2;
+      if(!animate){
+        track.style.transition = 'none';
+      }
+      track.style.transform = `translateX(${offset - idx * (slideW + gap)}px)`;
+      if(!animate){
+        track.offsetHeight;            // force reflow
+        track.style.transition = '';
+      }
+      const r = realIdx();
+      slides.forEach((s,n)=>s.classList.toggle('is-active', n === idx));
+      dots.forEach((d,n)=>d.classList.toggle('active', n === r));
+    }
+    function go(target){
+      if(busy) return;
+      busy = true;
+      idx = target;
+      layout(true);
+    }
+
+    track.addEventListener('transitionend', ()=>{
+      busy = false;
+      if(total <= 1) return;
+      if(idx === total + 1){ idx = 1;     layout(false); }
+      else if(idx === 0)   { idx = total; layout(false); }
+    });
+
+    prev && prev.addEventListener('click', ()=>go(idx - 1));
+    next && next.addEventListener('click', ()=>go(idx + 1));
+    dots.forEach(d => d.addEventListener('click', ()=>go(parseInt(d.dataset.i,10) + 1)));
+    window.addEventListener('resize', ()=>layout(false));
+
+    let timer = null;
+    function start(){ if(total > 1) timer = setInterval(()=>go(idx + 1), 6000); }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    track.parentElement.addEventListener('mouseenter', stop);
+    track.parentElement.addEventListener('mouseleave', start);
+
+    layout(false);
+    start();
+  })();
+  </script>
 
   <!-- Recommended -->
   <h5 class="section-title mb-3">Recommended for you</h5>
