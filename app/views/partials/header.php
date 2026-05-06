@@ -16,17 +16,24 @@ $current   = $current ?? basename($_SERVER['PHP_SELF']);
 <style>
 :root{--sk-red:#C8181E;--sk-dark-red:#9B1015;--sk-black:#1a1a1a;--sk-gold:#D4A017;--sk-bg:#f5f5f5;}
 body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
-.navbar-shakeys{background:var(--sk-black)!important;padding:.6rem 1.5rem;}
-.navbar-shakeys .nav-link{color:#ccc!important;font-size:.88rem;transition:color .2s;padding:.4rem .7rem;border-bottom:2px solid transparent;}
-.navbar-shakeys .nav-link:hover,.navbar-shakeys .nav-link.active{color:var(--sk-gold)!important;border-bottom-color:var(--sk-gold);}
-.brand-badge{display:flex;align-items:center;justify-content:center;flex-direction:column;width:60px;height:60px;border-radius:50%;background:var(--sk-black);border:2.5px solid var(--sk-gold);text-decoration:none;}
-.brand-badge .est{color:var(--sk-gold);font-size:7px;font-weight:700;letter-spacing:1px;}
-.brand-badge .name{color:var(--sk-red);font-size:13px;font-weight:900;line-height:1;font-family:Georgia,serif;}
-.brand-badge .sub{color:#fff;font-size:6px;letter-spacing:1.5px;}
+.navbar-shakeys{background:rgb(18,18,18)!important;padding:.55rem 1.5rem;position:relative;z-index:50;}
+.navbar-shakeys .nav-link{color:#fff!important;font-size:14px;font-weight:700;transition:color .2s;padding:.4rem .8rem;border-bottom:2px solid transparent;}
+.navbar-shakeys .nav-link:hover,.navbar-shakeys .nav-link.active{color:var(--sk-red)!important;border-bottom-color:var(--sk-red);}
+.brand-badge{display:flex;align-items:center;text-decoration:none;flex-shrink:0;position:relative;z-index:10;}
+.brand-badge img{height:120px;width:auto;display:block;margin:15px 0 -50px;}
 .cart-badge{position:absolute;top:-4px;right:-6px;background:var(--sk-red);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.cat-bar{background:#2a0505;overflow-x:auto;white-space:nowrap;padding:.15rem 1rem;}
-.cat-bar a{color:#ddd;font-size:.82rem;padding:.65rem 1.1rem;display:inline-block;text-decoration:none;border-bottom:2px solid transparent;transition:all .2s;}
-.cat-bar a:hover,.cat-bar a.active{color:var(--sk-gold);border-bottom-color:var(--sk-gold);}
+.cat-carousel{background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),#C8181E url('https://www.shakeyspizza.ph/images/bg-image.png') center top / 130% auto no-repeat;padding:2rem 1rem;}
+.cat-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 3rem;}
+.cat-track{display:flex;gap:.9rem;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;}
+.cat-track::-webkit-scrollbar{display:none;}
+.cat-pill{flex:0 0 auto;width:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-radius:8px;padding:.9rem .6rem;text-decoration:none;color:#fff;font-weight:700;font-size:.85rem;text-align:center;transition:transform .18s,background .18s,color .18s;border:2px solid transparent;}
+.cat-pill:hover{transform:translateY(-2px);background:#fff;color:var(--sk-red);}
+.cat-pill.active{background:#fff;color:var(--sk-red);}
+.cat-pill .cat-icon{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;}
+.cat-arrow{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);border:none;color:#222;font-size:1.3rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:5;transition:background .15s;}
+.cat-arrow:hover{background:#fff;}
+.cat-arrow-left{left:0;}
+.cat-arrow-right{right:0;}
 .btn-shakeys{background:var(--sk-dark-red);color:#fff;border:none;border-radius:8px;font-weight:700;padding:.75rem;}
 .btn-shakeys:hover{background:#7a0c10;color:#fff;}
 .food-card{background:#fff;border-radius:12px;border:1px solid #eee;transition:transform .2s,box-shadow .2s;height:100%;}
@@ -50,9 +57,7 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 <nav class="navbar navbar-expand-lg navbar-shakeys sticky-top">
   <div class="container-fluid px-3">
     <a class="brand-badge me-3" href="home.php">
-      <span class="est">EST. 1954</span>
-      <span class="name">Shakey's</span>
-      <span class="sub">PIZZA PARLOR</span>
+      <img src="https://www.shakeyspizza.ph/logos/Shakey_s%20USA%20LOGO.png" alt="Shakey's Pizza">
     </a>
     <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
       <i class="bi bi-list text-white"></i>
@@ -87,13 +92,41 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
     </div>
   </div>
 </nav>
-<div class="cat-bar">
-  <?php
-  $cats = ['Promos','Supercard Exclusives','Pizza','Group Meals',"Chicken 'N Mojos",'Combos','Hero Sandwiches','Pasta','Sides','Salad','Desserts','Drinks'];
-  foreach ($cats as $c):
-    $active = (isset($_GET['category']) && $_GET['category'] === $c) ? 'active' : '';
-  ?>
-  <a href="menu.php?category=<?= urlencode($c) ?>" class="<?= $active ?>"><?= e($c) ?></a>
-  <?php endforeach; ?>
+<div class="cat-carousel">
+  <div class="cat-inner">
+  <button type="button" class="cat-arrow cat-arrow-left" onclick="scrollCats(-1)" aria-label="Previous">&#8249;</button>
+  <div class="cat-track" id="catTrack">
+    <?php
+    $cats = [
+      'Promos'               => '🎉',
+      'Supercard Exclusives' => '💳',
+      'Pizza'                => '🍕',
+      'Group Meals'          => '🍽️',
+      "Chicken 'N Mojos"     => '🍗',
+      'Combos'               => '🍱',
+      'Hero Sandwiches'      => '🥪',
+      'Pasta'                => '🍝',
+      'Sides'                => '🍟',
+      'Salad'                => '🥗',
+      'Desserts'             => '🍰',
+      'Drinks'               => '🥤',
+    ];
+    foreach ($cats as $c => $icon):
+      $active = (isset($_GET['category']) && $_GET['category'] === $c) ? 'active' : '';
+    ?>
+    <a href="menu.php?category=<?= urlencode($c) ?>" class="cat-pill <?= $active ?>">
+      <span class="cat-icon"><?= $icon ?></span>
+      <span class="cat-label"><?= e($c) ?></span>
+    </a>
+    <?php endforeach; ?>
+  </div>
+  <button type="button" class="cat-arrow cat-arrow-right" onclick="scrollCats(1)" aria-label="Next">&#8250;</button>
+  </div>
 </div>
+<script>
+function scrollCats(dir){
+  const t=document.getElementById('catTrack');
+  if(t) t.scrollBy({left:dir*320,behavior:'smooth'});
+}
+</script>
 <?php endif; ?>
