@@ -203,6 +203,14 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .badge-cancelled{background:#f8d7da;color:#58151c;}
 .promo-card{background:#fff;border-radius:10px;border:1px solid #eee;padding:1.2rem;transition:box-shadow .2s;cursor:pointer;}
 .promo-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.cat-tile{display:flex;flex-direction:column;align-items:center;background:#fff;border:1.5px solid var(--sk-red);border-radius:12px;padding:14px 10px 12px;text-align:center;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;height:100%;}
+.cat-tile:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(200,24,30,.15);text-decoration:none;}
+.cat-tile.is-active{box-shadow:0 8px 20px rgba(200,24,30,.22);border-width:2px;}
+.cat-tile-art{width:100%;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.cat-tile-img{max-width:88%;max-height:100%;object-fit:contain;filter:drop-shadow(0 5px 8px rgba(0,0,0,.08));}
+.cat-tile-emoji{font-size:3.6rem;line-height:1;filter:drop-shadow(0 5px 8px rgba(0,0,0,.08));}
+.cat-tile-label{color:var(--sk-red);font-weight:700;font-size:.92rem;letter-spacing:.2px;margin-top:auto;}
+@media (max-width:768px){.cat-tile{padding:10px 8px 10px;border-radius:10px;}.cat-tile-art{height:90px;margin-bottom:8px;}.cat-tile-emoji{font-size:2.6rem;}.cat-tile-label{font-size:.8rem;}}
 </style>
 </head>
 <body>

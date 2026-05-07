@@ -1,5 +1,21 @@
 <?php
 $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤','Bundle'=>'🎉','Sides'=>'🍟','Drinks'=>'🥤','Desserts'=>'🍰','Salad'=>'🥗','Combos'=>'🥡','Default'=>'🍽️'];
+$catImageMap = [
+  'Pizza'           => 'pizza.png',
+  "Chicken 'N Mojos"=> 'chicken.png',
+  'Sides'           => 'sides.png',
+  'Pasta'           => 'pasta.png',
+  'Group Meals'     => 'group-meals.png',
+  'Promos'          => 'promos.png',
+  'Drinks'          => 'drinks.png',
+  'Combos'          => 'combos.png',
+  'Desserts'        => 'desserts.png',
+  'Soup & Salad'    => 'salad.png',
+  'Hero Sandwiches' => 'sandwich.png',
+  'Starters'        => 'sides.png',
+  'Extras'          => 'extras.png',
+  'Supercard Exclusives' => 'supercard.png',
+];
 ?>
 
 <div class="container-fluid px-3 px-md-4 py-3" style="max-width:1100px;margin:0 auto;">
@@ -22,25 +38,31 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
     </div>
   </form>
 
-  <div class="row g-3 mb-4">
-    <div class="col-6 col-md-3 col-lg-2">
-      <a href="/menu" class="text-decoration-none">
-        <div class="text-center p-3 rounded-3 border <?= !$category ? 'border-danger' : 'border-light bg-white' ?>" style="cursor:pointer;">
-          <div style="font-size:2rem;">🍽️</div>
-          <div class="fw-bold mt-1" style="color:var(--sk-red);font-size:.8rem;">All Items</div>
+  <div class="row g-3 g-md-4 mb-5">
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="/menu" class="cat-tile <?= !$category ? 'is-active' : '' ?>">
+        <div class="cat-tile-art">
+          <img src="/assets/img/categories/all.png" alt="All Items" class="cat-tile-img">
         </div>
+        <div class="cat-tile-label">All Items</div>
       </a>
     </div>
     <?php foreach ($categories as $cat):
-      $emoji = $emojiMap[$cat['Prod_Category']] ?? $emojiMap['Default'];
-      $active = $category === $cat['Prod_Category'];
+      $catName = $cat['Prod_Category'];
+      $img = $catImageMap[$catName] ?? null;
+      $emoji = $emojiMap[$catName] ?? $emojiMap['Default'];
+      $active = $category === $catName;
     ?>
-    <div class="col-6 col-md-3 col-lg-2">
-      <a href="/menu?category=<?= urlencode($cat['Prod_Category']) ?>" class="text-decoration-none">
-        <div class="text-center p-3 rounded-3 border <?= $active ? 'border-danger' : 'border-light bg-white' ?>" style="cursor:pointer;">
-          <div style="font-size:2rem;"><?= $emoji ?></div>
-          <div class="fw-bold mt-1" style="color:var(--sk-red);font-size:.8rem;"><?= e($cat['Prod_Category']) ?></div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="/menu?category=<?= urlencode($catName) ?>" class="cat-tile <?= $active ? 'is-active' : '' ?>">
+        <div class="cat-tile-art">
+          <?php if ($img): ?>
+            <img src="/assets/img/categories/<?= $img ?>" alt="<?= e($catName) ?>" class="cat-tile-img">
+          <?php else: ?>
+            <span class="cat-tile-emoji"><?= $emoji ?></span>
+          <?php endif; ?>
         </div>
+        <div class="cat-tile-label"><?= e($catName) ?></div>
       </a>
     </div>
     <?php endforeach; ?>

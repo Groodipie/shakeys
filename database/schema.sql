@@ -184,7 +184,25 @@ INSERT INTO Product (Prod_Name, Prod_Category, Prod_BasePrice, Prod_Type, Prod_S
 ('Truffle Mushroom Chicken',   'Group Meals',    279.00, 'Chicken', 'Available'),
 ('HBO Bundle',                 'Promos',         999.00, 'Bundle',  'Available'),
 ('Coke 1.5L',                  'Drinks',          89.00, 'Beverage','Available'),
-('Royal 1.5L',                 'Drinks',          89.00, 'Beverage','Available');
+('Royal 1.5L',                 'Drinks',          89.00, 'Beverage','Available'),
+('Spaghetti & Chicken Combo',  'Combos',         229.00, 'Combo',     'Available'),
+('Mojos & Chicken Combo',      'Combos',         219.00, 'Combo',     'Available'),
+('Pizza Slice & Soda Combo',   'Combos',         149.00, 'Combo',     'Available'),
+('Classic Hero Sandwich',      'Hero Sandwiches', 199.00,'Sandwich',  'Available'),
+('Roast Beef Hero',            'Hero Sandwiches', 219.00,'Sandwich',  'Available'),
+('Chicken Hero Sandwich',      'Hero Sandwiches', 209.00,'Sandwich',  'Available'),
+('S\'mores Pizza',             'Desserts',       249.00, 'Dessert',   'Available'),
+('Chocolate Lava Cake',        'Desserts',       129.00, 'Dessert',   'Available'),
+('Bibingka Cheesecake',        'Desserts',       159.00, 'Dessert',   'Available'),
+('Onion Rings',                'Starters',        99.00, 'Sides',     'Available'),
+('Mozzarella Sticks',          'Starters',       139.00, 'Sides',     'Available'),
+('Captain\'s Choice Platter',  'Starters',       299.00, 'Sides',     'Available'),
+('Tuna Caesar Salad',          'Soup & Salad',   189.00, 'Salad',     'Available'),
+('Garden Salad',               'Soup & Salad',   149.00, 'Salad',     'Available'),
+('Cream of Mushroom Soup',     'Soup & Salad',   119.00, 'Soup',      'Available'),
+('Extra Rice',                 'Extras',          39.00, 'Sides',     'Available'),
+('Extra Gravy',                'Extras',          25.00, 'Sides',     'Available'),
+('Extra Mojo Sauce',           'Extras',          25.00, 'Sides',     'Available');
 
 INSERT INTO Rider (Rider_FirstName, Rider_LastName, Rider_ContactNumber, Rider_Status) VALUES
 ('Juan', 'Dela Cruz',  '+639171234567', 'Available'),
