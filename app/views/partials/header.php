@@ -122,8 +122,8 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .food-card-h .foot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;gap:.5rem;}
 .food-card-h .starts{font-size:.7rem;color:#888;margin:0;line-height:1;}
 .food-card-h .price{font-weight:800;font-size:1.05rem;color:#1a1a1a;}
-.order-btn{background:var(--sk-red);color:#fff;border:none;border-radius:999px;font-weight:700;font-size:.78rem;letter-spacing:.5px;padding:.5rem 1.25rem;transition:background .15s;}
-.order-btn:hover{background:var(--sk-dark-red);}
+.order-btn{background:var(--sk-red);color:#fff;border:none;border-radius:999px;font-weight:700;font-size:.78rem;letter-spacing:.5px;padding:.5rem 1.25rem;transition:background .15s;text-decoration:none;display:inline-block;}
+.order-btn:hover{background:var(--sk-dark-red);color:#fff;}
 @media (max-width: 768px){
   .food-card-h{padding:.75rem;gap:.75rem;}
   .food-card-h .thumb{flex:0 0 80px;width:80px;height:80px;font-size:2.2rem;}

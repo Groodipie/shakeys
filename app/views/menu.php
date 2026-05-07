@@ -2,15 +2,17 @@
 $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤','Bundle'=>'🎉','Sides'=>'🍟','Drinks'=>'🥤','Desserts'=>'🍰','Salad'=>'🥗','Combos'=>'🥡','Default'=>'🍽️'];
 ?>
 
-<div class="container-fluid px-3 px-md-4 py-3">
+<div class="container-fluid px-3 px-md-4 py-3" style="max-width:1100px;margin:0 auto;">
 
-  <div class="supercard-bar mb-4">
-    <div>
-      <h6 class="fw-bold mb-0" style="color:var(--sk-gold);">Free Pizza. Chicken. <span style="color:var(--sk-red);">Plus</span> More!</h6>
-      <small class="text-secondary">Supercard Members enjoy exclusive benefits from Shakey's.</small>
+  <a href="/account" class="supercard-cta mb-4">
+    <div class="supercard-cta-art supercard-cta-art-left"></div>
+    <div class="supercard-cta-art supercard-cta-art-right"></div>
+    <div class="supercard-cta-body">
+      <h3 class="supercard-cta-title">Free Pizza. Chicken. <span class="hl">Plus</span> More!</h3>
+      <p class="supercard-cta-sub">Supercard Members enjoy these benefits from Shakey's and Peri-Peri Charcoal Chicken and Sauce Bar.</p>
     </div>
-    <button class="btn btn-sm fw-bold" style="border:2px solid #ccc;color:#ccc;background:none;">KNOW MORE</button>
-  </div>
+    <span class="supercard-cta-btn">KNOW MORE</span>
+  </a>
 
   <form method="GET" class="mb-4">
     <div class="input-group" style="max-width:400px;">
@@ -59,6 +61,7 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
   <div class="row g-3 mb-5">
     <?php foreach ($products as $prod):
       $emoji = $emojiMap[$prod['Prod_Type']] ?? $emojiMap['Default'];
+      $isPizza = ($prod['Prod_Type'] ?? '') === 'Pizza';
     ?>
     <div class="col-6 col-md-4 col-lg-3">
       <div class="food-card">
@@ -69,6 +72,11 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
           <p class="text-muted mb-2" style="font-size:.78rem;"><?= e($prod['Prod_Type']) ?></p>
           <div class="d-flex align-items-center justify-content-between">
             <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
+            <?php if ($isPizza): ?>
+              <a href="/product/<?= (int)$prod['Prod_ID'] ?>" class="btn btn-sm fw-bold" style="background:var(--sk-red);color:#fff;border-radius:6px;font-size:.78rem;">
+                Order
+              </a>
+            <?php else: ?>
             <form method="POST" action="/add_to_cart">
               <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
               <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
@@ -78,6 +86,7 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
                 Add to Cart
               </button>
             </form>
+            <?php endif; ?>
           </div>
         </div>
       </div>

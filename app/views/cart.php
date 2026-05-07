@@ -1,5 +1,5 @@
-<div class="container-fluid px-3 px-md-4 py-4">
-  <h5 class="section-title mb-4">Your Cart</h5>
+<div class="container-fluid px-3 px-md-4 py-4" style="max-width:1100px;margin:0 auto;">
+  <h5 class="section-title mb-4 mt-4">Your Cart</h5>
 
   <?php if (empty($cart)): ?>
   <div class="bg-white rounded-4 p-5 text-center shadow-sm" style="max-width:480px;margin:0 auto;">
@@ -22,6 +22,14 @@
                  style="width:64px;height:64px;background:#fdf0f0;font-size:2.2rem;">🍕</div>
             <div class="flex-grow-1 min-w-0">
               <h6 class="fw-bold mb-0 text-truncate" style="font-size:.9rem;"><?= e($item['name']) ?></h6>
+              <?php if (!empty($item['crust']) || !empty($item['size'])):
+                $bits = array_filter([$item['crust'] ?? '', $item['size'] ?? '']);
+              ?>
+                <small class="d-block text-muted" style="font-size:.72rem;"><?= e(implode(' · ', $bits)) ?></small>
+              <?php endif; ?>
+              <?php if (!empty($item['toppings'])): ?>
+                <small class="d-block text-muted" style="font-size:.72rem;">+ <?= e(implode(', ', $item['toppings'])) ?></small>
+              <?php endif; ?>
               <small class="text-muted">₱<?= number_format($item['price'],2) ?> each</small>
             </div>
             <div class="d-flex align-items-center gap-2">
@@ -36,8 +44,13 @@
                       style="width:28px;height:28px;background:#f5f5f5;font-size:1rem;"
                       onclick="changeQty('<?= $key ?>',this,1)">+</button>
             </div>
-            <div class="text-end" style="min-width:70px;">
+            <div class="text-end" style="min-width:90px;">
               <div class="fw-bold" style="color:var(--sk-red);font-size:.9rem;">₱<?= number_format($itemTotal,2) ?></div>
+              <?php if (!empty($item['crust']) || !empty($item['size'])): ?>
+                <a href="/product/<?= (int)$item['prod_id'] ?>?edit=<?= urlencode($key) ?>" class="text-secondary d-block" style="font-size:.75rem;text-decoration:none;">
+                  <i class="bi bi-pencil"></i> Edit
+                </a>
+              <?php endif; ?>
               <a href="/cart?remove=<?= urlencode($key) ?>" class="text-danger" style="font-size:.75rem;text-decoration:none;">
                 <i class="bi bi-x-circle"></i> Remove
               </a>

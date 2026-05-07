@@ -1,5 +1,5 @@
-<div class="container-fluid px-3 px-md-4 py-4">
-  <h5 class="section-title mb-4">Checkout</h5>
+<div class="container-fluid px-3 px-md-4 py-4" style="max-width:1100px;margin:0 auto;">
+  <h5 class="section-title mb-4 mt-4">Checkout</h5>
 
   <form method="POST" action="/place_order">
     <div class="row g-4">
@@ -23,29 +23,6 @@
             </select>
           </div>
         </div>
-
-        <?php if ($hasPizza): ?>
-        <div class="bg-white rounded-4 p-4 shadow-sm mb-3">
-          <h6 class="fw-bold mb-3"><i class="bi bi-sliders me-2" style="color:var(--sk-red);"></i>Pizza Options</h6>
-          <div class="mb-2">
-            <label class="form-label fw-semibold" style="font-size:.84rem;">Crust Type</label>
-            <div class="d-flex gap-3">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="crust_type" value="Thin Crust" id="thin" checked>
-                <label class="form-check-label" for="thin">Thin Crust</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="crust_type" value="Hand Tossed" id="hand">
-                <label class="form-check-label" for="hand">Hand Tossed</label>
-              </div>
-            </div>
-          </div>
-          <div class="mb-0">
-            <label class="form-label fw-semibold" style="font-size:.84rem;">Special Instructions</label>
-            <textarea name="instructions" class="form-control" rows="2" placeholder="Extra cheese, less salt, etc."></textarea>
-          </div>
-        </div>
-        <?php endif; ?>
 
         <div class="bg-white rounded-4 p-4 shadow-sm mb-3">
           <h6 class="fw-bold mb-3"><i class="bi bi-tag me-2" style="color:var(--sk-red);"></i>Promo Code</h6>

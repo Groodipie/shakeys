@@ -18,6 +18,38 @@ class Cart {
         }
     }
 
+    public static function addCustom(
+        int $prodId,
+        string $name,
+        float $unitPrice,
+        int $qty,
+        string $crust,
+        string $size,
+        array $toppings,
+        float $toppingsTotal
+    ): void {
+        sort($toppings);
+        $signature = $crust . '|' . $size . '|' . implode(',', $toppings);
+        $key = 'prod_' . $prodId . '_' . substr(md5($signature), 0, 8);
+        $linePrice = round($unitPrice + $toppingsTotal, 2);
+
+        if (isset($_SESSION['cart'][$key])) {
+            $_SESSION['cart'][$key]['qty'] += $qty;
+        } else {
+            $_SESSION['cart'][$key] = [
+                'prod_id'        => $prodId,
+                'name'           => $name,
+                'price'          => $linePrice,
+                'qty'            => $qty,
+                'crust'          => $crust,
+                'size'           => $size,
+                'toppings'       => $toppings,
+                'toppings_total' => $toppingsTotal,
+                'base_price'     => $unitPrice,
+            ];
+        }
+    }
+
     public static function updateQuantities(array $qtyMap): void {
         foreach ($qtyMap as $key => $qty) {
             $qty = max(1, (int)$qty);

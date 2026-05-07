@@ -15,6 +15,13 @@ if ($path === '/' || $path === '') {
     return;
 }
 
+// Pretty product URL: /product/123 → product.php with $_GET['id']=123
+if (preg_match('#^/product/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[1];
+    require __DIR__ . '/product.php';
+    return;
+}
+
 // /foo  →  foo.php
 $candidate = __DIR__ . '/' . trim($path, '/') . '.php';
 if (is_file($candidate)) {

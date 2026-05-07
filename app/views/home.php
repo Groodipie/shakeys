@@ -182,6 +182,7 @@ $descFor = function(array $prod) use ($descMap) {
     <div class="row g-3">
       <?php foreach ($recommended as $prod):
         $emoji = $emojiMap[$prod['Prod_Type']] ?? $emojiMap['Default'];
+        $isPizza = ($prod['Prod_Type'] ?? '') === 'Pizza';
       ?>
       <div class="col-12 col-md-4">
         <div class="food-card food-card-h">
@@ -194,6 +195,9 @@ $descFor = function(array $prod) use ($descMap) {
                 <p class="starts">Starts at</p>
                 <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
               </div>
+              <?php if ($isPizza): ?>
+                <a href="/product/<?= (int)$prod['Prod_ID'] ?>" class="order-btn">ORDER</a>
+              <?php else: ?>
               <form method="POST" action="/add_to_cart">
                 <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
                 <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
@@ -201,6 +205,7 @@ $descFor = function(array $prod) use ($descMap) {
                 <input type="hidden" name="redirect"   value="/home">
                 <button type="submit" class="order-btn">ORDER</button>
               </form>
+              <?php endif; ?>
             </div>
           </div>
         </div>
@@ -216,7 +221,9 @@ $descFor = function(array $prod) use ($descMap) {
       <a href="/menu" class="view-menu-link">VIEW MENU</a>
     </div>
     <div class="row g-3">
-      <?php foreach ($featured as $prod): ?>
+      <?php foreach ($featured as $prod):
+        $isPizza = ($prod['Prod_Type'] ?? '') === 'Pizza';
+      ?>
       <div class="col-12 col-md-4">
         <div class="food-card food-card-h">
           <div class="thumb">🍕</div>
@@ -228,6 +235,9 @@ $descFor = function(array $prod) use ($descMap) {
                 <p class="starts">Starts at</p>
                 <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
               </div>
+              <?php if ($isPizza): ?>
+                <a href="/product/<?= (int)$prod['Prod_ID'] ?>" class="order-btn">ORDER</a>
+              <?php else: ?>
               <form method="POST" action="/add_to_cart">
                 <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
                 <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
@@ -235,6 +245,7 @@ $descFor = function(array $prod) use ($descMap) {
                 <input type="hidden" name="redirect"   value="/home">
                 <button type="submit" class="order-btn">ORDER</button>
               </form>
+              <?php endif; ?>
             </div>
           </div>
         </div>

@@ -73,12 +73,20 @@ class Order {
             );
             foreach ($cart as $item) {
                 $isPizza = self::isPizza($item['name']);
+                $itemCrust = $item['crust'] ?? ($isPizza ? $orderData['crust_type'] : null);
+                if ($itemCrust === 'Hand-Tossed') $itemCrust = 'Hand Tossed';
+                $instructionParts = [];
+                if (!empty($item['size']))     $instructionParts[] = 'Size: ' . $item['size'];
+                if (!empty($item['toppings'])) $instructionParts[] = 'Toppings: ' . implode(', ', $item['toppings']);
+                if (!empty($orderData['instructions'])) $instructionParts[] = $orderData['instructions'];
+                $instruction = $instructionParts ? implode(' | ', $instructionParts) : null;
+
                 $itemStmt->execute([
                     $item['qty'],
-                    $isPizza ? $orderData['crust_type'] : null,
+                    $itemCrust,
                     $item['price'],
-                    0.00,
-                    $orderData['instructions'] ?: null,
+                    (float)($item['toppings_total'] ?? 0),
+                    $instruction,
                     $orderId,
                     $item['prod_id'],
                 ]);

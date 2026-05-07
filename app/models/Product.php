@@ -6,6 +6,13 @@ class Product {
         $this->pdo = $pdo;
     }
 
+    public function find(int $id): ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM Product WHERE Prod_ID=?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
     public function recommended(int $limit = 4): array {
         $stmt = $this->pdo->prepare(
             "SELECT * FROM Product WHERE Prod_Status='Available' ORDER BY Prod_ID LIMIT $limit"
