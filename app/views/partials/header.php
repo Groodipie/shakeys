@@ -3,7 +3,8 @@ $cart      = $_SESSION['cart']     ?? [];
 $cartCount = array_sum(array_column($cart, 'qty'));
 $isLogged  = isset($_SESSION['cust_id']);
 $firstName = $_SESSION['cust_firstname'] ?? '';
-$current   = $current ?? basename($_SERVER['PHP_SELF']);
+$current   = $current ?? trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '', '/');
+if ($current === '') $current = 'home';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +39,8 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .cat-arrow-right{right:0;}
 .btn-shakeys{background:var(--sk-dark-red);color:#fff;border:none;border-radius:8px;font-weight:700;padding:.75rem;}
 .btn-shakeys:hover{background:#7a0c10;color:#fff;}
+.btn-login-nav{background:var(--sk-red);color:#fff;border:none;border-radius:3px;font-size:13px;font-weight:700;padding:6px 18px;text-decoration:none;cursor:pointer;display:inline-block;}
+.btn-login-nav:hover{background:var(--sk-dark-red);color:#fff;}
 .food-card{background:#fff;border-radius:12px;border:1px solid #eee;transition:transform .2s,box-shadow .2s;height:100%;}
 .food-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.12);}
 .food-card .thumb{background:#fdf0f0;height:140px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
@@ -204,10 +207,9 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 </head>
 <body>
 
-<?php if($isLogged): ?>
 <nav class="navbar navbar-expand-lg navbar-shakeys sticky-top">
   <div class="container-fluid px-3">
-    <a class="brand-badge me-3" href="home.php">
+    <a class="brand-badge me-3" href="/home">
       <img src="https://www.shakeyspizza.ph/logos/Shakey_s%20USA%20LOGO.png" alt="Shakey's Pizza">
     </a>
     <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
@@ -217,25 +219,30 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
       <ul class="navbar-nav mx-auto gap-1">
         <?php
         $links = [
-          'home.php'           => 'Home',
-          'menu.php'           => 'Menu',
-          'promos.php'         => 'Promos',
-          'order_tracking.php' => 'Order Tracking',
-          'account.php'        => 'Supercard',
-          'book_party.php'     => 'Book a Party',
+          'home'           => 'Home',
+          'menu'           => 'Menu',
+          'promos'         => 'Promos',
+          'order_tracking' => 'Order Tracking',
+          'account'        => 'Supercard',
+          'book_party'     => 'Book a Party',
         ];
         foreach ($links as $f => $l):
           $active = ($current === $f) ? 'active' : '';
         ?>
-        <li class="nav-item"><a class="nav-link <?= $active ?>" href="<?= $f ?>"><?= $l ?></a></li>
+        <li class="nav-item"><a class="nav-link <?= $active ?>" href="/<?= $f ?>"><?= $l ?></a></li>
         <?php endforeach; ?>
       </ul>
       <div class="d-flex align-items-center gap-3">
-        <a href="account.php" class="text-white text-decoration-none d-flex align-items-center gap-2" style="font-size:.88rem;">
+        <?php if ($isLogged): ?>
+        <a href="/account" class="text-white text-decoration-none d-flex align-items-center gap-2" style="font-size:.88rem;">
           Hi, <?= e($firstName) ?>!
           <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:var(--sk-red);color:#fff;font-size:.85rem;"><?= e(strtoupper($firstName[0] ?? 'U')) ?></div>
         </a>
-        <a href="cart.php" class="position-relative text-decoration-none">
+        <?php else: ?>
+        <a href="/login" class="btn-login-nav">Login</a>
+        <?php endif; ?>
+        <i class="bi bi-search text-white" style="font-size:1.1rem;cursor:pointer;"></i>
+        <a href="/cart" class="position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5 text-white"></i>
           <?php if ($cartCount > 0): ?><span class="cart-badge"><?= $cartCount ?></span><?php endif; ?>
         </a>
@@ -243,41 +250,3 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
     </div>
   </div>
 </nav>
-<div class="cat-carousel">
-  <div class="cat-inner">
-  <button type="button" class="cat-arrow cat-arrow-left" onclick="scrollCats(-1)" aria-label="Previous">&#8249;</button>
-  <div class="cat-track" id="catTrack">
-    <?php
-    $cats = [
-      'Promos'               => '🎉',
-      'Supercard Exclusives' => '💳',
-      'Pizza'                => '🍕',
-      'Group Meals'          => '🍽️',
-      "Chicken 'N Mojos"     => '🍗',
-      'Combos'               => '🍱',
-      'Hero Sandwiches'      => '🥪',
-      'Pasta'                => '🍝',
-      'Sides'                => '🍟',
-      'Salad'                => '🥗',
-      'Desserts'             => '🍰',
-      'Drinks'               => '🥤',
-    ];
-    foreach ($cats as $c => $icon):
-      $active = (isset($_GET['category']) && $_GET['category'] === $c) ? 'active' : '';
-    ?>
-    <a href="menu.php?category=<?= urlencode($c) ?>" class="cat-pill <?= $active ?>">
-      <span class="cat-icon"><?= $icon ?></span>
-      <span class="cat-label"><?= e($c) ?></span>
-    </a>
-    <?php endforeach; ?>
-  </div>
-  <button type="button" class="cat-arrow cat-arrow-right" onclick="scrollCats(1)" aria-label="Next">&#8250;</button>
-  </div>
-</div>
-<script>
-function scrollCats(dir){
-  const t=document.getElementById('catTrack');
-  if(t) t.scrollBy({left:dir*320,behavior:'smooth'});
-}
-</script>
-<?php endif; ?>

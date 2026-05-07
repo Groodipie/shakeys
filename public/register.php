@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $customers = new Customer($pdo);
         if ($customers->findByEmail($email)) {
-            $error = 'This email is already registered. <a href="login.php" style="color:var(--sk-red);">Login here</a>.';
+            $error = 'This email is already registered. <a href="/login" style="color:var(--sk-red);">Login here</a>.';
         } else {
             $customers->create([
                 'first_name' => $first,
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'address'    => '',
                 'password'   => $pass,
             ]);
-            $success = 'Account created! <a href="login.php" style="color:var(--sk-red);font-weight:700;">Login now</a>.';
+            $success = 'Account created! <a href="/login" style="color:var(--sk-red);font-weight:700;">Login now</a>.';
         }
     }
 }

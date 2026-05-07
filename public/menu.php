@@ -12,5 +12,6 @@ $categories = $products->categories();
 $products   = $products->search($category ?: null, $search ?: null);
 
 partial('header', ['pageTitle' => $pageTitle]);
+partial('category_bar');
 view('menu', compact('categories', 'products', 'category', 'search'));
 partial('footer');

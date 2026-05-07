@@ -3,13 +3,13 @@ require_once __DIR__ . '/../app/core/bootstrap.php';
 require_login();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['place_order'])) {
-    header('Location: cart.php');
+    header('Location: /cart');
     exit;
 }
 
 $cart = Cart::items();
 if (empty($cart)) {
-    header('Location: cart.php');
+    header('Location: /cart');
     exit;
 }
 
@@ -18,7 +18,7 @@ $brnchId = (int)($_POST['branch_id'] ?? 0) ?: null;
 $total   = (float)($_POST['total'] ?? 0);
 
 if (!$address || !$brnchId || $total <= 0) {
-    header('Location: checkout.php?error=missing_fields');
+    header('Location: /checkout?error=missing_fields');
     exit;
 }
 
@@ -48,10 +48,10 @@ try {
     );
     Cart::clear();
     $_SESSION['order_success'] = $orderId;
-    header('Location: order_tracking.php?new=' . $orderId);
+    header('Location: /order_tracking?new=' . $orderId);
     exit;
 } catch (PDOException $e) {
     error_log('Order placement failed: ' . $e->getMessage());
-    header('Location: checkout.php?error=db_error');
+    header('Location: /checkout?error=db_error');
     exit;
 }

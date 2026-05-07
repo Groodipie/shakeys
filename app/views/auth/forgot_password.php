@@ -31,7 +31,7 @@ body{margin:0;}
       <strong>OTP Sent!</strong><br>
       <span style="font-size:.85rem;">Check your email for the password reset PIN.</span>
     </div>
-    <a href="login.php" class="btn btn-shakeys mt-2">Back to Login</a>
+    <a href="/login" class="btn btn-shakeys mt-2">Back to Login</a>
     <?php else: ?>
     <?php if ($error): ?>
     <div class="alert alert-danger py-2" style="font-size:.85rem;"><?= e($error) ?></div>
@@ -44,7 +44,7 @@ body{margin:0;}
       <button type="submit" class="btn btn-shakeys">Recover Password</button>
     </form>
     <div class="text-center mt-3">
-      <a href="login.php" style="color:var(--sk-red);font-size:.85rem;font-weight:600;text-decoration:none;">
+      <a href="/login" style="color:var(--sk-red);font-size:.85rem;font-weight:600;text-decoration:none;">
         ← Back to Login
       </a>
     </div>

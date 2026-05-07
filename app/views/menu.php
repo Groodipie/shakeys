@@ -22,7 +22,7 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
 
   <div class="row g-3 mb-4">
     <div class="col-6 col-md-3 col-lg-2">
-      <a href="menu.php" class="text-decoration-none">
+      <a href="/menu" class="text-decoration-none">
         <div class="text-center p-3 rounded-3 border <?= !$category ? 'border-danger' : 'border-light bg-white' ?>" style="cursor:pointer;">
           <div style="font-size:2rem;">🍽️</div>
           <div class="fw-bold mt-1" style="color:var(--sk-red);font-size:.8rem;">All Items</div>
@@ -34,7 +34,7 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
       $active = $category === $cat['Prod_Category'];
     ?>
     <div class="col-6 col-md-3 col-lg-2">
-      <a href="menu.php?category=<?= urlencode($cat['Prod_Category']) ?>" class="text-decoration-none">
+      <a href="/menu?category=<?= urlencode($cat['Prod_Category']) ?>" class="text-decoration-none">
         <div class="text-center p-3 rounded-3 border <?= $active ? 'border-danger' : 'border-light bg-white' ?>" style="cursor:pointer;">
           <div style="font-size:2rem;"><?= $emoji ?></div>
           <div class="fw-bold mt-1" style="color:var(--sk-red);font-size:.8rem;"><?= e($cat['Prod_Category']) ?></div>
@@ -53,7 +53,7 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
   <div class="text-center py-5">
     <div style="font-size:4rem;">🍕</div>
     <h5 class="mt-3 text-muted">No items found</h5>
-    <a href="menu.php" class="btn mt-2" style="background:var(--sk-red);color:#fff;">View All Items</a>
+    <a href="/menu" class="btn mt-2" style="background:var(--sk-red);color:#fff;">View All Items</a>
   </div>
   <?php else: ?>
   <div class="row g-3 mb-5">
@@ -69,11 +69,11 @@ $emojiMap = ['Pizza'=>'🍕','Chicken'=>'🍗','Pasta'=>'🍝','Beverage'=>'🥤
           <p class="text-muted mb-2" style="font-size:.78rem;"><?= e($prod['Prod_Type']) ?></p>
           <div class="d-flex align-items-center justify-content-between">
             <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
-            <form method="POST" action="add_to_cart.php">
+            <form method="POST" action="/add_to_cart">
               <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
               <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
               <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
-              <input type="hidden" name="redirect"   value="menu.php<?= $category ? '?category=' . urlencode($category) : '' ?>">
+              <input type="hidden" name="redirect"   value="/menu<?= $category ? '?category=' . urlencode($category) : '' ?>">
               <button type="submit" class="btn btn-sm fw-bold" style="background:var(--sk-red);color:#fff;border-radius:6px;font-size:.78rem;">
                 Add to Cart
               </button>

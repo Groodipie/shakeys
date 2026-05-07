@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../app/core/bootstrap.php';
-require_login();
 
 $pageTitle = "Home — Shakey's Delivery";
 
@@ -12,5 +11,6 @@ $activePromos = $promotions->active(3);
 $featured     = $products->byType('Pizza', 5);
 
 partial('header', ['pageTitle' => $pageTitle]);
+partial('category_bar');
 view('home', compact('recommended', 'activePromos', 'featured'));
 partial('footer');

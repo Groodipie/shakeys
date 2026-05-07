@@ -1,7 +1,7 @@
 <div class="container-fluid px-3 px-md-4 py-4">
   <h5 class="section-title mb-4">Checkout</h5>
 
-  <form method="POST" action="place_order.php">
+  <form method="POST" action="/place_order">
     <div class="row g-4">
 
       <div class="col-lg-8">
@@ -140,7 +140,7 @@
             <i class="bi bi-bag-check me-1"></i> Place Order
           </button>
           <?php endif; ?>
-          <a href="cart.php" class="btn btn-outline-secondary w-100 mt-2">← Back to Cart</a>
+          <a href="/cart" class="btn btn-outline-secondary w-100 mt-2">← Back to Cart</a>
         </div>
       </div>
     </div>

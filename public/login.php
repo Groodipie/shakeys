@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['cust_email']     = $customer['Cust_Email'];
             $_SESSION['cust_phone']     = $customer['Cust_Phone'];
             $_SESSION['cust_address']   = $customer['Cust_Address'];
-            header('Location: home.php');
+            header('Location: /home');
             exit;
         }
         $error = 'Invalid email or password.';

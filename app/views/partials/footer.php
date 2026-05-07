@@ -8,7 +8,7 @@
       </div>
 
       <nav class="sk-footer-nav" aria-label="Footer navigation">
-        <a href="home.php">HOME</a>
+        <a href="/home">HOME</a>
         <span class="dot">&middot;</span>
         <a href="#">ABOUT US</a>
         <span class="dot">&middot;</span>

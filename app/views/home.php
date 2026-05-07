@@ -79,7 +79,7 @@ $descFor = function(array $prod) use ($descMap) {
             <div class="bigcar-cta">
               <?php if ($headline): ?><span class="bigcar-price"><?= $headline ?></span><?php endif; ?>
               <span class="bigcar-save"><?= e($saveLabel) ?></span>
-              <a href="menu.php?category=Promos" class="bigcar-btn">Order Now</a>
+              <a href="/menu?category=Promos" class="bigcar-btn">Order Now</a>
             </div>
           </div>
           <div class="bigcar-art"><?= $th['emoji'] ?></div>
@@ -194,11 +194,11 @@ $descFor = function(array $prod) use ($descMap) {
                 <p class="starts">Starts at</p>
                 <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
               </div>
-              <form method="POST" action="add_to_cart.php">
+              <form method="POST" action="/add_to_cart">
                 <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
                 <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
                 <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
-                <input type="hidden" name="redirect"   value="home.php">
+                <input type="hidden" name="redirect"   value="/home">
                 <button type="submit" class="order-btn">ORDER</button>
               </form>
             </div>
@@ -213,7 +213,7 @@ $descFor = function(array $prod) use ($descMap) {
   <section class="home-section mb-5">
     <div class="d-flex align-items-center justify-content-between mb-3">
       <h5 class="section-title mb-0">Featured products</h5>
-      <a href="menu.php" class="view-menu-link">VIEW MENU</a>
+      <a href="/menu" class="view-menu-link">VIEW MENU</a>
     </div>
     <div class="row g-3">
       <?php foreach ($featured as $prod): ?>
@@ -228,11 +228,11 @@ $descFor = function(array $prod) use ($descMap) {
                 <p class="starts">Starts at</p>
                 <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
               </div>
-              <form method="POST" action="add_to_cart.php">
+              <form method="POST" action="/add_to_cart">
                 <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
                 <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
                 <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">
-                <input type="hidden" name="redirect"   value="home.php">
+                <input type="hidden" name="redirect"   value="/home">
                 <button type="submit" class="order-btn">ORDER</button>
               </form>
             </div>
@@ -245,7 +245,7 @@ $descFor = function(array $prod) use ($descMap) {
 
   <!-- Supercard CTA banner -->
   <section class="home-section mt-5 mb-4">
-    <a href="account.php" class="supercard-cta">
+    <a href="/account" class="supercard-cta">
       <div class="supercard-cta-art supercard-cta-art-left"></div>
       <div class="supercard-cta-art supercard-cta-art-right"></div>
       <div class="supercard-cta-body">

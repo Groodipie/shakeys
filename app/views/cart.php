@@ -6,7 +6,7 @@
     <div style="font-size:4rem;" class="mb-3">🛒</div>
     <h5 class="fw-bold">Your cart is empty</h5>
     <p class="text-muted mb-4" style="font-size:.9rem;">Add delicious items from our menu!</p>
-    <a href="menu.php" class="btn fw-bold px-4 py-2" style="background:var(--sk-red);color:#fff;border-radius:8px;">Browse Menu</a>
+    <a href="/menu" class="btn fw-bold px-4 py-2" style="background:var(--sk-red);color:#fff;border-radius:8px;">Browse Menu</a>
   </div>
 
   <?php else: ?>
@@ -38,7 +38,7 @@
             </div>
             <div class="text-end" style="min-width:70px;">
               <div class="fw-bold" style="color:var(--sk-red);font-size:.9rem;">₱<?= number_format($itemTotal,2) ?></div>
-              <a href="cart.php?remove=<?= urlencode($key) ?>" class="text-danger" style="font-size:.75rem;text-decoration:none;">
+              <a href="/cart?remove=<?= urlencode($key) ?>" class="text-danger" style="font-size:.75rem;text-decoration:none;">
                 <i class="bi bi-x-circle"></i> Remove
               </a>
             </div>
@@ -46,7 +46,7 @@
           <?php endforeach; ?>
 
           <div class="p-3 d-flex gap-2 justify-content-between">
-            <a href="menu.php" class="btn btn-sm" style="border:1px solid var(--sk-red);color:var(--sk-red);">
+            <a href="/menu" class="btn btn-sm" style="border:1px solid var(--sk-red);color:var(--sk-red);">
               <i class="bi bi-plus-circle me-1"></i>Add More Items
             </a>
             <button type="submit" name="update_cart" class="btn btn-sm btn-secondary">
@@ -73,10 +73,10 @@
           <span class="fw-bold">Total</span>
           <span class="fw-bold fs-5" style="color:var(--sk-red);">₱<?= number_format($total,2) ?></span>
         </div>
-        <a href="checkout.php" class="btn fw-bold w-100 py-2" style="background:var(--sk-red);color:#fff;border-radius:8px;">
+        <a href="/checkout" class="btn fw-bold w-100 py-2" style="background:var(--sk-red);color:#fff;border-radius:8px;">
           Proceed to Checkout <i class="bi bi-arrow-right ms-1"></i>
         </a>
-        <a href="menu.php" class="btn btn-outline-secondary w-100 mt-2 py-2">Continue Shopping</a>
+        <a href="/menu" class="btn btn-outline-secondary w-100 mt-2 py-2">Continue Shopping</a>
       </div>
     </div>
   </div>

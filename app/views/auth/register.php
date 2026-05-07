@@ -53,23 +53,23 @@ body { display:flex; flex-direction:column; min-height:100vh; }
 <body>
 
 <nav class="sk-nav d-flex align-items-center gap-3">
-  <a href="home.php" class="sk-logo">
+  <a href="/home" class="sk-logo">
     <small>EST. 1954</small>
     <span>Shakey's</span>
     <small>PIZZA PARLOR</small>
   </a>
   <div class="nav-links d-none d-lg-flex flex-grow-1 justify-content-center">
-    <a href="home.php">Home</a>
-    <a href="menu.php">Menu</a>
-    <a href="promos.php">Promos</a>
-    <a href="order_tracking.php">Order Tracking</a>
-    <a href="account.php">Supercard</a>
-    <a href="book_party.php">Book a Party</a>
+    <a href="/home">Home</a>
+    <a href="/menu">Menu</a>
+    <a href="/promos">Promos</a>
+    <a href="/order_tracking">Order Tracking</a>
+    <a href="/account">Supercard</a>
+    <a href="/book_party">Book a Party</a>
   </div>
   <div class="ms-auto d-flex align-items-center gap-3">
-    <a href="login.php" class="btn-login-nav">Login</a>
+    <a href="/login" class="btn-login-nav">Login</a>
     <i class="bi bi-search text-white" style="font-size:1.1rem;cursor:pointer;"></i>
-    <a href="cart.php" class="text-white text-decoration-none"><i class="bi bi-cart3" style="font-size:1.2rem;"></i></a>
+    <a href="/cart" class="text-white text-decoration-none"><i class="bi bi-cart3" style="font-size:1.2rem;"></i></a>
   </div>
 </nav>
 
@@ -77,7 +77,7 @@ body { display:flex; flex-direction:column; min-height:100vh; }
   <div class="auth-card">
     <h4 class="fw-black text-center mb-1" style="font-size:1.55rem;">Create a Shakey's Account</h4>
     <p class="text-center text-muted mb-4" style="font-size:.85rem;">
-      Already have an account? <a href="login.php" style="color:var(--sk-red);font-weight:800;text-decoration:none;">Login</a>
+      Already have an account? <a href="/login" style="color:var(--sk-red);font-weight:800;text-decoration:none;">Login</a>
     </p>
 
     <?php if ($error): ?>
