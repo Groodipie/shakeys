@@ -23,8 +23,15 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .navbar-shakeys .nav-link{color:#fff!important;font-size:14px;font-weight:700;transition:color .2s;padding:.4rem .8rem;border-bottom:2px solid transparent;}
 .navbar-shakeys .nav-link:hover,.navbar-shakeys .nav-link.active{color:var(--sk-red)!important;border-bottom-color:var(--sk-red);}
 .brand-badge{display:flex;align-items:center;text-decoration:none;flex-shrink:0;position:relative;z-index:10;}
-.brand-badge img{height:120px;width:auto;display:block;margin:15px 0 -50px;}
+.brand-badge img{height:120px;width:auto;display:block;margin:15px 0 -50px;max-width:100%;}
 .cart-badge{position:absolute;top:-4px;right:-6px;background:var(--sk-red);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+@media (max-width: 992px) {
+  .brand-badge img{height:100px;margin:10px 0 -40px;}
+}
+@media (max-width: 768px) {
+  .brand-badge img{height:75px;margin:8px 0 -30px;}
+}
 .cat-carousel{background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),#C8181E url('https://www.shakeyspizza.ph/images/bg-image.png') center top / 130% auto no-repeat;padding:2rem 1rem;}
 .cat-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 3rem;}
 .cat-track{display:flex;gap:.9rem;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;}
@@ -49,7 +56,7 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .bigcar{position:relative;}
 .bigcar-viewport{overflow:hidden;}
 .bigcar-track{display:flex;gap:18px;transition:transform .55s cubic-bezier(.4,0,.2,1);will-change:transform;}
-.bigcar-slide{flex:0 0 auto;width:min(82%, 1100px);aspect-ratio:5/2.5;border-radius:18px;position:relative;overflow:hidden;color:#fff;display:flex;align-items:center;padding:2.5rem 3rem;box-shadow:0 12px 32px rgba(0,0,0,.18);transform:scale(.94);opacity:.55;transition:transform .45s ease, opacity .45s ease;text-decoration:none;}
+.bigcar-slide{flex:0 0 auto;width:min(82%, 1100px);aspect-ratio:5/2.5;border-radius:18px;position:relative;overflow:hidden;color:#fff;display:flex;align-items:center;padding:2.5rem 3rem;box-shadow:0 12px 32px rgba(0,0,0,.18);transform:scale(.94);opacity:.55;transition:transform .45s ease, opacity .45s ease,text-decoration ease .15s;}
 .bigcar-slide.is-active{transform:scale(1);opacity:1;}
 .bigcar-slide-img{background-size:cover;background-position:center;background-repeat:no-repeat;padding:0;}
 .bigcar-slide-missing{background:repeating-linear-gradient(45deg,#f1f1f1 0 12px,#e6e6e6 12px 24px);color:#666;align-items:center;justify-content:center;}
@@ -70,6 +77,35 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .bigcar-deco{position:absolute;z-index:0;pointer-events:none;}
 .bigcar-deco-tl{top:0;left:0;width:140px;height:140px;}
 .bigcar-deco-br{bottom:0;right:0;width:160px;height:160px;}
+
+@media (max-width: 992px) {
+  .bigcar-slide{width:min(92%, 900px);padding:2rem 2rem;}
+  .bigcar-content{max-width:100%;}
+  .bigcar-desc{max-width:100%;font-size:.95rem;}
+  .bigcar-art{width:170px;height:170px;right:1.5rem;font-size:5rem;}
+}
+@media (max-width: 768px){
+  .bigcar-slide{aspect-ratio:16/9;padding:1.5rem 1.6rem;width:88%;}
+  .bigcar-content{max-width:100%;}
+  .bigcar-content, .bigcar-cta{width:100%;}
+  .bigcar-cta{flex-direction:column;align-items:flex-start;}
+  .bigcar-price{font-size:1.85rem;}
+  .bigcar-desc{font-size:.92rem;margin-bottom:1.2rem;}
+  .bigcar-title{font-size:clamp(1.8rem, 6vw, 2.6rem);}
+  .bigcar-art{display:none;}
+  .bigcar-arrow{width:36px;height:36px;font-size:1.2rem;}
+  .bigcar-prev{left:.4rem;}
+  .bigcar-next{right:.4rem;}
+  .bigcar-dots{gap:6px;}
+}
+@media (max-width: 540px){
+  .bigcar-slide{width:95%;padding:1.15rem 1rem;gap:.75rem;}
+  .bigcar-title{font-size:1.7rem;}
+  .bigcar-price{font-size:1.6rem;}
+  .bigcar-btn{padding:.55rem 1.1rem;font-size:.82rem;}
+  .bigcar-arrow{width:32px;height:32px;}
+  .bigcar-viewport{padding:0 0.5rem;}
+}
 
 /* Theme: late-night purple */
 .bigcar-theme-late{background:linear-gradient(135deg,#2a0e3d 0%,#4d1a5e 60%,#6b2475 100%);}
@@ -101,15 +137,6 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 .bigcar-dots{display:flex;gap:8px;justify-content:center;margin-top:1rem;}
 .bigcar-dot{width:9px;height:9px;border-radius:50%;border:none;background:#d8b9bb;padding:0;cursor:pointer;transition:background .2s, transform .2s;}
 .bigcar-dot.active{background:var(--sk-red);transform:scale(1.25);}
-
-@media (max-width: 768px){
-  .bigcar-slide{aspect-ratio:16/9;padding:1.5rem 1.6rem;width:88%;}
-  .bigcar-content{max-width:100%;}
-  .bigcar-art{display:none;}
-  .bigcar-arrow{width:36px;height:36px;font-size:1.2rem;}
-  .bigcar-prev{left:.4rem;}
-  .bigcar-next{right:.4rem;}
-}
 .section-title{font-size:1.4rem;font-weight:800;color:#1a1a1a;}
 .home-section{max-width:1100px;margin-left:auto;margin-right:auto;}
 .view-menu-link{color:var(--sk-red);font-weight:800;font-size:.85rem;letter-spacing:1px;text-decoration:none;}
