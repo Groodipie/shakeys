@@ -20,7 +20,7 @@
     foreach ($cats as $c => $icon):
       $active = (isset($_GET['category']) && $_GET['category'] === $c) ? 'active' : '';
     ?>
-    <a href="/menu?category=<?= urlencode($c) ?>" class="cat-pill <?= $active ?>">
+    <a href="<?= e(url('/menu?category=' . urlencode($c))) ?>" class="cat-pill <?= $active ?>">
       <span class="cat-icon"><?= $icon ?></span>
       <span class="cat-label"><?= e($c) ?></span>
     </a>

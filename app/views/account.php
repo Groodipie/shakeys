@@ -63,7 +63,7 @@
           <button class="btn btn-outline-secondary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#changePassModal">
             <i class="bi bi-lock"></i> Change Password
           </button>
-          <a href="/logout" class="btn d-flex align-items-center gap-2 justify-content-center" style="background:var(--sk-red);color:#fff;border-radius:8px;">
+          <a href="<?= e(url('/logout')) ?>" class="btn d-flex align-items-center gap-2 justify-content-center" style="background:var(--sk-red);color:#fff;border-radius:8px;">
             <i class="bi bi-box-arrow-right"></i> Log Out
           </a>
           <button class="btn d-flex align-items-center gap-2 justify-content-center" style="border:1px solid var(--sk-red);color:var(--sk-red);background:none;" data-bs-toggle="modal" data-bs-target="#deleteModal">
@@ -161,7 +161,7 @@
       </div>
       <div class="modal-footer border-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <a href="/logout?delete=1" class="btn btn-danger fw-bold">Yes, Delete</a>
+        <a href="<?= e(url('/logout?delete=1')) ?>" class="btn btn-danger fw-bold">Yes, Delete</a>
       </div>
     </div>
   </div>

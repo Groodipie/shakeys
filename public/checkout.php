@@ -6,7 +6,7 @@ $pageTitle = "Checkout — Shakey's Delivery";
 
 $cart = Cart::items();
 if (empty($cart)) {
-    header('Location: /cart');
+    header('Location: ' . url('/cart'));
     exit;
 }
 

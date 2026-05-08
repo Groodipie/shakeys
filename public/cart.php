@@ -6,13 +6,13 @@ $pageTitle = "Cart — Shakey's Delivery";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cart'], $_POST['qty']) && is_array($_POST['qty'])) {
     Cart::updateQuantities($_POST['qty']);
-    header('Location: /cart');
+    header('Location: ' . url('/cart'));
     exit;
 }
 
 if (isset($_GET['remove'])) {
     Cart::remove((string)$_GET['remove']);
-    header('Location: /cart');
+    header('Location: ' . url('/cart'));
     exit;
 }
 

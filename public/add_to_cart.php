@@ -11,9 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($prodId && $prodName && $price > 0) {
         Cart::add($prodId, $prodName, $price);
     }
-    header('Location: ' . $redirect);
+    header('Location: ' . url($redirect));
     exit;
 }
 
-header('Location: /menu');
+header('Location: ' . url('/menu'));
 exit;

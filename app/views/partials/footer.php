@@ -9,7 +9,7 @@
       </div>
 
       <nav class="sk-footer-nav" aria-label="Footer navigation">
-        <a href="/home">HOME</a>
+        <a href="<?= e(url('/home')) ?>">HOME</a>
         <span class="dot">&middot;</span>
         <a href="#">ABOUT US</a>
         <span class="dot">&middot;</span>

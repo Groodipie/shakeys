@@ -1,14 +1,14 @@
 <?php
 function require_login(): void {
     if (!isset($_SESSION['cust_id'])) {
-        header('Location: /login');
+        header('Location: ' . url('/login'));
         exit;
     }
 }
 
 function require_guest(): void {
     if (isset($_SESSION['cust_id'])) {
-        header('Location: /home');
+        header('Location: ' . url('/home'));
         exit;
     }
 }

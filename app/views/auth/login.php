@@ -55,21 +55,21 @@ body { display:flex; flex-direction:column; min-height:100vh; }
 <body>
 
 <nav class="sk-nav d-flex align-items-center gap-3">
-  <a href="/home" class="sk-logo">
+  <a href="<?= e(url('/home')) ?>" class="sk-logo">
     <img src="https://www.shakeyspizza.ph/logos/Shakey_s%20USA%20LOGO.png" alt="Shakey's Pizza">
   </a>
   <div class="nav-links d-none d-lg-flex flex-grow-1 justify-content-center">
-    <a href="/home">Home</a>
-    <a href="/menu">Menu</a>
-    <a href="/promos">Promos</a>
-    <a href="/order_tracking">Order Tracking</a>
-    <a href="/account">Supercard</a>
-    <a href="/book_party">Book a Party</a>
+    <a href="<?= e(url('/home')) ?>">Home</a>
+    <a href="<?= e(url('/menu')) ?>">Menu</a>
+    <a href="<?= e(url('/promos')) ?>">Promos</a>
+    <a href="<?= e(url('/order_tracking')) ?>">Order Tracking</a>
+    <a href="<?= e(url('/account')) ?>">Supercard</a>
+    <a href="<?= e(url('/book_party')) ?>">Book a Party</a>
   </div>
   <div class="ms-auto d-flex align-items-center gap-3">
     <button class="btn-login-nav">Login</button>
     <i class="bi bi-search text-white" style="font-size:1.1rem;cursor:pointer;"></i>
-    <a href="/cart" class="text-white text-decoration-none"><i class="bi bi-cart3" style="font-size:1.2rem;"></i></a>
+    <a href="<?= e(url('/cart')) ?>" class="text-white text-decoration-none"><i class="bi bi-cart3" style="font-size:1.2rem;"></i></a>
   </div>
 </nav>
 
@@ -77,7 +77,7 @@ body { display:flex; flex-direction:column; min-height:100vh; }
   <div class="auth-card">
     <h4 class="fw-black text-center mb-1" style="font-size:1.55rem;">Login to Shakey's</h4>
     <p class="text-center text-muted mb-4" style="font-size:.85rem;">
-      New user? <a href="/register" style="color:var(--sk-red);font-weight:800;text-decoration:none;">Create an account</a>
+      New user? <a href="<?= e(url('/register')) ?>" style="color:var(--sk-red);font-weight:800;text-decoration:none;">Create an account</a>
     </p>
 
     <?php if ($error): ?>
@@ -98,7 +98,7 @@ body { display:flex; flex-direction:column; min-height:100vh; }
             <input class="form-check-input" type="checkbox" id="keep1" style="accent-color:var(--sk-red);">
             <label class="form-check-label" for="keep1" style="font-size:.82rem;color:#555;">Keep me logged in</label>
           </div>
-          <a href="/forgot_password" style="color:var(--sk-red);font-size:.82rem;font-weight:700;text-decoration:none;">Forgot password?</a>
+          <a href="<?= e(url('/forgot_password')) ?>" style="color:var(--sk-red);font-size:.82rem;font-weight:700;text-decoration:none;">Forgot password?</a>
         </div>
       </div>
 
@@ -120,7 +120,7 @@ body { display:flex; flex-direction:column; min-height:100vh; }
             <input class="form-check-input" type="checkbox" id="keep2" style="accent-color:var(--sk-red);">
             <label class="form-check-label" for="keep2" style="font-size:.82rem;color:#555;">Keep me logged in</label>
           </div>
-          <a href="/forgot_password" style="color:var(--sk-red);font-size:.82rem;font-weight:700;text-decoration:none;">Forgot password?</a>
+          <a href="<?= e(url('/forgot_password')) ?>" style="color:var(--sk-red);font-size:.82rem;font-weight:700;text-decoration:none;">Forgot password?</a>
         </div>
       </div>
     </form>

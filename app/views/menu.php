@@ -20,7 +20,7 @@ $catImageMap = [
 
 <div class="container-fluid px-3 px-md-4 py-3" style="max-width:1100px;margin:0 auto;">
 
-  <a href="/account" class="supercard-cta mb-4">
+  <a href="<?= e(url('/account')) ?>" class="supercard-cta mb-4">
     <div class="supercard-cta-art supercard-cta-art-left"></div>
     <div class="supercard-cta-art supercard-cta-art-right"></div>
     <div class="supercard-cta-body">
@@ -40,9 +40,9 @@ $catImageMap = [
 
   <div class="row g-3 g-md-4 mb-5">
     <div class="col-6 col-md-4 col-lg-3">
-      <a href="/menu" class="cat-tile <?= !$category ? 'is-active' : '' ?>">
+      <a href="<?= e(url('/menu')) ?>" class="cat-tile <?= !$category ? 'is-active' : '' ?>">
         <div class="cat-tile-art">
-          <img src="/assets/img/categories/all.png" alt="All Items" class="cat-tile-img">
+          <img src="<?= e(url('/assets/img/categories/all.png')) ?>" alt="All Items" class="cat-tile-img">
         </div>
         <div class="cat-tile-label">All Items</div>
       </a>
@@ -54,10 +54,10 @@ $catImageMap = [
       $active = $category === $catName;
     ?>
     <div class="col-6 col-md-4 col-lg-3">
-      <a href="/menu?category=<?= urlencode($catName) ?>" class="cat-tile <?= $active ? 'is-active' : '' ?>">
+      <a href="<?= e(url('/menu?category=' . urlencode($catName))) ?>" class="cat-tile <?= $active ? 'is-active' : '' ?>">
         <div class="cat-tile-art">
           <?php if ($img): ?>
-            <img src="/assets/img/categories/<?= $img ?>" alt="<?= e($catName) ?>" class="cat-tile-img">
+            <img src="<?= e(url('/assets/img/categories/' . $img)) ?>" alt="<?= e($catName) ?>" class="cat-tile-img">
           <?php else: ?>
             <span class="cat-tile-emoji"><?= $emoji ?></span>
           <?php endif; ?>
@@ -77,7 +77,7 @@ $catImageMap = [
   <div class="text-center py-5">
     <div style="font-size:4rem;">🍕</div>
     <h5 class="mt-3 text-muted">No items found</h5>
-    <a href="/menu" class="btn mt-2" style="background:var(--sk-red);color:#fff;">View All Items</a>
+    <a href="<?= e(url('/menu')) ?>" class="btn mt-2" style="background:var(--sk-red);color:#fff;">View All Items</a>
   </div>
   <?php else: ?>
   <div class="row g-3 mb-5">
@@ -95,11 +95,11 @@ $catImageMap = [
           <div class="d-flex align-items-center justify-content-between">
             <span class="price">₱<?= number_format($prod['Prod_BasePrice'],2) ?></span>
             <?php if ($isPizza): ?>
-              <a href="/product/<?= (int)$prod['Prod_ID'] ?>" class="btn btn-sm fw-bold" style="background:var(--sk-red);color:#fff;border-radius:6px;font-size:.78rem;">
+              <a href="<?= e(url('/product/' . (int)$prod['Prod_ID'])) ?>" class="btn btn-sm fw-bold" style="background:var(--sk-red);color:#fff;border-radius:6px;font-size:.78rem;">
                 Order
               </a>
             <?php else: ?>
-            <form method="POST" action="/add_to_cart">
+            <form method="POST" action="<?= e(url('/add_to_cart')) ?>">
               <input type="hidden" name="prod_id"    value="<?= $prod['Prod_ID'] ?>">
               <input type="hidden" name="prod_name"  value="<?= e($prod['Prod_Name']) ?>">
               <input type="hidden" name="prod_price" value="<?= $prod['Prod_BasePrice'] ?>">

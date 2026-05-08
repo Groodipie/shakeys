@@ -65,9 +65,9 @@ $selQty       = $editing['qty'] ?? 1;
 
 <div class="pd-wrap">
   <?php if ($editKey !== ''): ?>
-    <a href="/cart" class="pd-back"><i class="bi bi-arrow-left"></i> Back to cart</a>
+    <a href="<?= e(url('/cart')) ?>" class="pd-back"><i class="bi bi-arrow-left"></i> Back to cart</a>
   <?php else: ?>
-    <a href="/menu" class="pd-back"><i class="bi bi-arrow-left"></i> Back to menu</a>
+    <a href="<?= e(url('/menu')) ?>" class="pd-back"><i class="bi bi-arrow-left"></i> Back to menu</a>
   <?php endif; ?>
 
   <?php if ($error === 'invalid'): ?>
@@ -75,7 +75,7 @@ $selQty       = $editing['qty'] ?? 1;
   <?php endif; ?>
 
   <div class="pd-card">
-    <form method="POST" action="/product?id=<?= $prodId ?>" id="pdForm">
+    <form method="POST" action="<?= e(url('/product?id=' . $prodId)) ?>" id="pdForm">
       <?php if ($editKey !== ''): ?>
         <input type="hidden" name="edit_key" value="<?= e($editKey) ?>">
       <?php endif; ?>

@@ -22,7 +22,7 @@ $badgeClass = [
            style="width:100px;height:100px;background:#f0f0f5;font-size:3.5rem;">📦</div>
       <h5 class="fw-bold mb-2">You currently have no ongoing orders</h5>
       <p class="text-muted mb-4" style="font-size:.88rem;">Craving for something delicious? Order from us below!</p>
-      <a href="/menu" class="btn fw-bold px-4 py-2" style="background:var(--sk-red);color:#fff;border-radius:8px;">
+      <a href="<?= e(url('/menu')) ?>" class="btn fw-bold px-4 py-2" style="background:var(--sk-red);color:#fff;border-radius:8px;">
         Add a New Order
       </a>
     </div>
@@ -93,7 +93,7 @@ $badgeClass = [
     <?php endforeach; ?>
 
     <div class="text-center mt-3 pb-4">
-      <a href="/menu" class="btn fw-bold px-4" style="background:var(--sk-red);color:#fff;border-radius:8px;">+ Add a New Order</a>
+      <a href="<?= e(url('/menu')) ?>" class="btn fw-bold px-4" style="background:var(--sk-red);color:#fff;border-radius:8px;">+ Add a New Order</a>
     </div>
   </div>
   <?php endif; ?>

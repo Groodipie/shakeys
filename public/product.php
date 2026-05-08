@@ -10,7 +10,7 @@ if (!$product) {
     http_response_code(404);
     $pageTitle = 'Product not found';
     partial('header', ['pageTitle' => $pageTitle]);
-    echo '<div class="container py-5 text-center"><h4>Product not found</h4><a href="/menu" class="btn mt-3" style="background:var(--sk-red);color:#fff;">Back to Menu</a></div>';
+    echo '<div class="container py-5 text-center"><h4>Product not found</h4><a href="' . e(url('/menu')) . '" class="btn mt-3" style="background:var(--sk-red);color:#fff;">Back to Menu</a></div>';
     partial('footer');
     exit;
 }
@@ -23,12 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $editKey  = $_POST['edit_key'] ?? '';
 
     if (!PizzaOptions::isValidCrust($crust) || !PizzaOptions::isValidSize($size)) {
-        header('Location: /product/' . $id . '?error=invalid' . ($editKey ? '&edit=' . urlencode($editKey) : ''));
+        header('Location: ' . url('/product/' . $id . '?error=invalid' . ($editKey ? '&edit=' . urlencode($editKey) : '')));
         exit;
     }
     foreach ($toppings as $t) {
         if (!PizzaOptions::isValidTopping($t)) {
-            header('Location: /product/' . $id . '?error=invalid' . ($editKey ? '&edit=' . urlencode($editKey) : ''));
+            header('Location: ' . url('/product/' . $id . '?error=invalid' . ($editKey ? '&edit=' . urlencode($editKey) : '')));
             exit;
         }
     }
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $toppings,
         $tops
     );
-    header('Location: /cart');
+    header('Location: ' . url('/cart'));
     exit;
 }
 

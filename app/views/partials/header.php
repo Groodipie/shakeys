@@ -217,7 +217,7 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
 
 <nav class="navbar navbar-expand-lg navbar-shakeys sticky-top">
   <div class="container-fluid px-3">
-    <a class="brand-badge me-3" href="/home">
+    <a class="brand-badge me-3" href="<?= e(url('/home')) ?>">
       <img src="https://www.shakeyspizza.ph/logos/Shakey_s%20USA%20LOGO.png" alt="Shakey's Pizza">
     </a>
     <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
@@ -237,20 +237,20 @@ body{background:var(--sk-bg);font-family:'Segoe UI',system-ui,sans-serif;}
         foreach ($links as $f => $l):
           $active = ($current === $f) ? 'active' : '';
         ?>
-        <li class="nav-item"><a class="nav-link <?= $active ?>" href="/<?= $f ?>"><?= $l ?></a></li>
+        <li class="nav-item"><a class="nav-link <?= $active ?>" href="<?= e(url('/' . $f)) ?>"><?= $l ?></a></li>
         <?php endforeach; ?>
       </ul>
       <div class="d-flex align-items-center gap-3">
         <?php if ($isLogged): ?>
-        <a href="/account" class="text-white text-decoration-none d-flex align-items-center gap-2" style="font-size:.88rem;">
+        <a href="<?= e(url('/account')) ?>" class="text-white text-decoration-none d-flex align-items-center gap-2" style="font-size:.88rem;">
           Hi, <?= e($firstName) ?>!
           <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:var(--sk-red);color:#fff;font-size:.85rem;"><?= e(strtoupper($firstName[0] ?? 'U')) ?></div>
         </a>
         <?php else: ?>
-        <a href="/login" class="btn-login-nav">Login</a>
+        <a href="<?= e(url('/login')) ?>" class="btn-login-nav">Login</a>
         <?php endif; ?>
         <i class="bi bi-search text-white" style="font-size:1.1rem;cursor:pointer;"></i>
-        <a href="/cart" class="position-relative text-decoration-none">
+        <a href="<?= e(url('/cart')) ?>" class="position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5 text-white"></i>
           <?php if ($cartCount > 0): ?><span class="cart-badge"><?= $cartCount ?></span><?php endif; ?>
         </a>
