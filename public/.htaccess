@@ -1,0 +1,17 @@
+# Mirrors public/router.php for Apache (XAMPP).
+
+RewriteEngine On
+
+DirectoryIndex home.php index.php
+
+# Serve real files / directories as-is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# /product/123 → product.php?id=123
+RewriteRule ^product/(\d+)/?$ product.php?id=$1 [L,QSA]
+
+# /foo → foo.php (only when foo.php exists)
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/.]+)/?$ $1.php [L,QSA]
