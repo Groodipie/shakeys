@@ -1,17 +1,13 @@
-# Mirrors public/router.php for Apache (XAMPP).
+# Front-controller pattern: route every non-asset request through index.php.
 
 RewriteEngine On
 
-DirectoryIndex home.php index.php
+DirectoryIndex index.php
 
-# Serve real files / directories as-is
+# Serve real files / directories as-is (assets, etc.)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# /product/123 → product.php?id=123
-RewriteRule ^product/(\d+)/?$ product.php?id=$1 [L,QSA]
-
-# /foo → foo.php (only when foo.php exists)
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^([^/.]+)/?$ $1.php [L,QSA]
+# Everything else → index.php (front controller)
+RewriteRule ^ index.php [L,QSA]

@@ -22,8 +22,13 @@ require_once APP_ROOT . '/core/db.php';
 require_once APP_ROOT . '/core/auth.php';
 
 spl_autoload_register(function ($class) {
-    $file = APP_ROOT . '/models/' . $class . '.php';
-    if (is_file($file)) require_once $file;
+    foreach (['/models/', '/controllers/', '/core/'] as $dir) {
+        $file = APP_ROOT . $dir . $class . '.php';
+        if (is_file($file)) {
+            require_once $file;
+            return;
+        }
+    }
 });
 
 function view(string $name, array $data = []): void {
