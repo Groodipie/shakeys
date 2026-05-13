@@ -24,11 +24,15 @@ $router->any('/forgot_password',  'AuthController@forgotPassword');
 $router->any('/logout',           'AuthController@logout');
 
 $router->any('/staff/login',      'StaffAuthController@login');
+$router->any('/staff/dashboard',  'StaffController@dashboard');
+$router->any('/staff/logout',     'StaffController@logout');
 $router->any('/admin/login',      'AdminAuthController@login');
 $router->any('/rider/login',      'RiderAuthController@login');
 
 $router->any('/admin/dashboard',  'AdminController@dashboard');
 $router->any('/admin/staff',      'AdminController@staff');
+$router->post('/admin/staff/{id:\d+}/update', 'AdminController@updateStaff');
+$router->post('/admin/staff/{id:\d+}/delete', 'AdminController@deleteStaff');
 $router->any('/admin/riders',     'AdminController@riders');
 $router->any('/admin/products',   'AdminController@products');
 $router->any('/admin/logout',     'AdminController@logout');

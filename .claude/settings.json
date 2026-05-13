@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -l app/models/Employee.php)",
+      "Bash(php -l app/controllers/AdminController.php)",
+      "Bash(php -l app/views/admin/staff.php)",
+      "Bash(php -l app/core/routes.php)",
+      "Bash(php -l app/views/partials/admin_header.php)",
+      "Bash(php -l app/controllers/StaffAuthController.php)",
+      "Bash(php -l app/controllers/StaffController.php)",
+      "Bash(php -l app/views/staff/dashboard.php)"
+    ]
+  }
+}

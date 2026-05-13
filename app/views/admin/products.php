@@ -6,6 +6,10 @@
 .empty-panel h5{font-weight:800;color:#1a1a1a;margin-bottom:.4rem;}
 </style>
 
+<a href="<?= e(url('/admin/products/new')) ?>" class="page-add-btn">
+  <i class="bi bi-plus-lg"></i><span>Add Product</span>
+</a>
+
 <h2 class="page-title">Add Product</h2>
 <p class="page-sub">Create and manage menu items.</p>
 

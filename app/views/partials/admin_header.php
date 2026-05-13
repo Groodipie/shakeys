@@ -3,7 +3,7 @@ $current = $current ?? '';
 $username = $_SESSION['admin_username'] ?? 'admin';
 $nav = [
   'dashboard' => ['label' => 'Dashboard',         'icon' => 'bi-speedometer2', 'href' => '/admin/dashboard'],
-  'staff'     => ['label' => 'Staff Management',  'icon' => 'bi-people',       'href' => '/admin/staff'],
+  'staff'     => ['label' => 'Employee Management', 'icon' => 'bi-people',     'href' => '/admin/staff'],
   'riders'    => ['label' => 'Rider Management',  'icon' => 'bi-bicycle',      'href' => '/admin/riders'],
   'products'  => ['label' => 'Add Product',       'icon' => 'bi-plus-square',  'href' => '/admin/products'],
 ];
@@ -38,11 +38,15 @@ body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:#f5f5f5;min
 .admin-sidebar a:hover{background:#252525;color:#fff;}
 .admin-sidebar a.active{background:#252525;color:#fff;border-left-color:var(--sk-red);}
 .admin-sidebar a i{font-size:1.05rem;width:18px;text-align:center;}
-.admin-main{flex:1;padding:2rem;min-width:0;}
+.admin-main{flex:1;padding:2rem;min-width:0;position:relative;}
+.page-add-btn{position:absolute;top:1.5rem;right:2rem;z-index:5;height:44px;padding:0 1.1rem 0 .95rem;border-radius:999px;background:var(--sk-red);color:#fff;border:none;font-size:.92rem;font-weight:700;line-height:1;display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;box-shadow:0 2px 8px rgba(200,24,30,.3);transition:background .15s,transform .15s;text-decoration:none;white-space:nowrap;}
+.page-add-btn:hover,.page-add-btn:focus{background:var(--sk-dark-red);color:#fff;outline:none;transform:translateY(-1px);}
+.page-add-btn i{font-size:1.15rem;}
 @media (max-width:768px){
   .admin-shell{flex-direction:column;}
   .admin-sidebar{width:100%;padding:.5rem 0;}
   .admin-sidebar a{padding:.6rem 1rem;}
+  .page-add-btn{top:1rem;right:1rem;}
 }
 </style>
 </head>

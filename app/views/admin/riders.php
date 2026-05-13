@@ -6,6 +6,10 @@
 .empty-panel h5{font-weight:800;color:#1a1a1a;margin-bottom:.4rem;}
 </style>
 
+<a href="<?= e(url('/admin/riders/new')) ?>" class="page-add-btn">
+  <i class="bi bi-plus-lg"></i><span>Add Rider</span>
+</a>
+
 <h2 class="page-title">Rider Management</h2>
 <p class="page-sub">Manage delivery riders and shift assignments.</p>
 
