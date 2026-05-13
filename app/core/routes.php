@@ -25,6 +25,8 @@ $router->any('/logout',           'AuthController@logout');
 
 $router->any('/staff/login',      'StaffAuthController@login');
 $router->any('/staff/dashboard',  'StaffController@dashboard');
+$router->any('/staff/orders',     'StaffController@orders');
+$router->post('/staff/orders/{id:\d+}/assign', 'StaffController@assignRider');
 $router->any('/staff/logout',     'StaffController@logout');
 $router->any('/admin/login',      'AdminAuthController@login');
 $router->any('/rider/login',      'RiderAuthController@login');

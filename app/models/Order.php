@@ -36,6 +36,60 @@ class Order {
         return $stmt->fetchAll();
     }
 
+    public function listForBranch(int $branchId): array {
+        $stmt = $this->pdo->prepare(
+            "SELECT o.*,
+                    CONCAT(c.Cust_FirstName,' ',c.Cust_LastName) AS Cust_Name,
+                    c.Cust_Phone,
+                    p.Pay_Method, p.Pay_Status,
+                    d.Dlvry_RiderID,
+                    CONCAT(r.Rider_FirstName,' ',r.Rider_LastName) AS Rider_Name
+             FROM `Order` o
+             LEFT JOIN Customer c ON c.Cust_ID      = o.Order_CustID
+             LEFT JOIN Payment  p ON p.Pay_OrderID  = o.Order_ID
+             LEFT JOIN Delivery d ON d.Dlvry_OrderID = o.Order_ID
+             LEFT JOIN Rider    r ON r.Rider_ID     = d.Dlvry_RiderID
+             WHERE o.Order_BrnchID = ?
+             ORDER BY o.Order_Date DESC"
+        );
+        $stmt->execute([$branchId]);
+        return $stmt->fetchAll();
+    }
+
+    public function assignRider(int $orderId, int $riderId, string $changedBy): void {
+        $this->pdo->beginTransaction();
+        try {
+            $check = $this->pdo->prepare('SELECT Dlvry_ID FROM Delivery WHERE Dlvry_OrderID = ?');
+            $check->execute([$orderId]);
+            $existing = $check->fetchColumn();
+
+            if ($existing) {
+                $upd = $this->pdo->prepare('UPDATE Delivery SET Dlvry_RiderID = ? WHERE Dlvry_OrderID = ?');
+                $upd->execute([$riderId, $orderId]);
+            } else {
+                $ins = $this->pdo->prepare(
+                    "INSERT INTO Delivery (Dlvry_Status, Dlvry_OrderID, Dlvry_RiderID)
+                     VALUES ('Assigned', ?, ?)"
+                );
+                $ins->execute([$orderId, $riderId]);
+            }
+
+            $statusUpd = $this->pdo->prepare("UPDATE `Order` SET Order_Status = 'Ready' WHERE Order_ID = ?");
+            $statusUpd->execute([$orderId]);
+
+            $log = $this->pdo->prepare(
+                "INSERT INTO OrderStatusLog (OrdLg_Status, OrdLg_ChangedBy, OrdLg_Timestamp, OrdLg_OrderID)
+                 VALUES ('Ready', ?, NOW(), ?)"
+            );
+            $log->execute([$changedBy, $orderId]);
+
+            $this->pdo->commit();
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
     public function items(int $orderId): array {
         $stmt = $this->pdo->prepare(
             'SELECT oi.*, p.Prod_Name, p.Prod_Type
