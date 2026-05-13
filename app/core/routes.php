@@ -30,6 +30,11 @@ $router->post('/staff/orders/{id:\d+}/assign', 'StaffController@assignRider');
 $router->any('/staff/logout',     'StaffController@logout');
 $router->any('/admin/login',      'AdminAuthController@login');
 $router->any('/rider/login',      'RiderAuthController@login');
+$router->any('/rider/dashboard',  'RiderController@dashboard');
+$router->any('/rider/orders',     'RiderController@orders');
+$router->post('/rider/orders/{id:\d+}/out_for_delivery', 'RiderController@markOutForDelivery');
+$router->post('/rider/orders/{id:\d+}/delivered',        'RiderController@markDelivered');
+$router->any('/rider/logout',     'RiderController@logout');
 
 $router->any('/admin/dashboard',  'AdminController@dashboard');
 $router->any('/admin/staff',      'AdminController@staff');

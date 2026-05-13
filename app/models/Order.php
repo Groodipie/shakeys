@@ -56,6 +56,26 @@ class Order {
         return $stmt->fetchAll();
     }
 
+    public function listForRider(int $riderId): array {
+        $stmt = $this->pdo->prepare(
+            "SELECT o.*,
+                    CONCAT(c.Cust_FirstName,' ',c.Cust_LastName) AS Cust_Name,
+                    c.Cust_Phone,
+                    b.Brnch_Name,
+                    p.Pay_Method, p.Pay_Status,
+                    d.Dlvry_Status, d.Dlvry_EstimatedTime
+             FROM `Order` o
+             JOIN Delivery d ON d.Dlvry_OrderID = o.Order_ID
+             LEFT JOIN Customer c ON c.Cust_ID     = o.Order_CustID
+             LEFT JOIN Branch   b ON b.Brnch_ID    = o.Order_BrnchID
+             LEFT JOIN Payment  p ON p.Pay_OrderID = o.Order_ID
+             WHERE d.Dlvry_RiderID = ?
+             ORDER BY o.Order_Date DESC"
+        );
+        $stmt->execute([$riderId]);
+        return $stmt->fetchAll();
+    }
+
     public function assignRider(int $orderId, int $riderId, string $changedBy): void {
         $this->pdo->beginTransaction();
         try {
@@ -90,6 +110,84 @@ class Order {
         }
     }
 
+    public function markInTransit(int $orderId, int $riderId, string $changedBy): bool {
+        $check = $this->pdo->prepare(
+            'SELECT 1 FROM Delivery WHERE Dlvry_OrderID = ? AND Dlvry_RiderID = ?'
+        );
+        $check->execute([$orderId, $riderId]);
+        if (!$check->fetchColumn()) {
+            return false;
+        }
+
+        $this->pdo->beginTransaction();
+        try {
+            $upd = $this->pdo->prepare(
+                "UPDATE Delivery
+                    SET Dlvry_Status = 'In Transit',
+                        Dlvry_PickTime = IFNULL(Dlvry_PickTime, NOW())
+                  WHERE Dlvry_OrderID = ? AND Dlvry_RiderID = ?"
+            );
+            $upd->execute([$orderId, $riderId]);
+
+            $statusUpd = $this->pdo->prepare("UPDATE `Order` SET Order_Status = 'In Transit' WHERE Order_ID = ?");
+            $statusUpd->execute([$orderId]);
+
+            $log = $this->pdo->prepare(
+                "INSERT INTO OrderStatusLog (OrdLg_Status, OrdLg_ChangedBy, OrdLg_Timestamp, OrdLg_OrderID)
+                 VALUES ('In Transit', ?, NOW(), ?)"
+            );
+            $log->execute([$changedBy, $orderId]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    public function markDelivered(int $orderId, int $riderId, string $changedBy): bool {
+        $check = $this->pdo->prepare(
+            'SELECT 1 FROM Delivery WHERE Dlvry_OrderID = ? AND Dlvry_RiderID = ?'
+        );
+        $check->execute([$orderId, $riderId]);
+        if (!$check->fetchColumn()) {
+            return false;
+        }
+
+        $this->pdo->beginTransaction();
+        try {
+            $upd = $this->pdo->prepare(
+                "UPDATE Delivery
+                    SET Dlvry_Status = 'Delivered',
+                        Dlvry_DeliveryTime = NOW()
+                  WHERE Dlvry_OrderID = ? AND Dlvry_RiderID = ?"
+            );
+            $upd->execute([$orderId, $riderId]);
+
+            $statusUpd = $this->pdo->prepare("UPDATE `Order` SET Order_Status = 'Delivered' WHERE Order_ID = ?");
+            $statusUpd->execute([$orderId]);
+
+            $payUpd = $this->pdo->prepare(
+                "UPDATE Payment SET Pay_Status = 'Paid', Pay_DateTime = NOW()
+                  WHERE Pay_OrderID = ? AND Pay_Status <> 'Paid'"
+            );
+            $payUpd->execute([$orderId]);
+
+            $log = $this->pdo->prepare(
+                "INSERT INTO OrderStatusLog (OrdLg_Status, OrdLg_ChangedBy, OrdLg_Timestamp, OrdLg_OrderID)
+                 VALUES ('Delivered', ?, NOW(), ?)"
+            );
+            $log->execute([$changedBy, $orderId]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
     public function items(int $orderId): array {
         $stmt = $this->pdo->prepare(
             'SELECT oi.*, p.Prod_Name, p.Prod_Type
@@ -107,7 +205,7 @@ class Order {
                 "INSERT INTO `Order`
                  (Order_Date, Order_Status, Order_TotalAmount, Order_DeliveryAddress,
                   Order_DeliveryFee, Order_CustID, Order_BrnchID, Order_PromoID)
-                 VALUES (NOW(),'Pending',?,?,?,?,?,?)"
+                 VALUES (NOW(),'Preparing',?,?,?,?,?,?)"
             );
             $stmt->execute([
                 $orderData['total'],
@@ -155,7 +253,7 @@ class Order {
 
             $logStmt = $this->pdo->prepare(
                 "INSERT INTO OrderStatusLog (OrdLg_Status, OrdLg_ChangedBy, OrdLg_Timestamp, OrdLg_OrderID)
-                 VALUES ('Pending', ?, NOW(), ?)"
+                 VALUES ('Preparing', ?, NOW(), ?)"
             );
             $logStmt->execute([$changedBy, $orderId]);
 
