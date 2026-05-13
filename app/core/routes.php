@@ -23,4 +23,14 @@ $router->any('/register',         'AuthController@register');
 $router->any('/forgot_password',  'AuthController@forgotPassword');
 $router->any('/logout',           'AuthController@logout');
 
+$router->any('/staff/login',      'StaffAuthController@login');
+$router->any('/admin/login',      'AdminAuthController@login');
+$router->any('/rider/login',      'RiderAuthController@login');
+
+$router->any('/admin/dashboard',  'AdminController@dashboard');
+$router->any('/admin/staff',      'AdminController@staff');
+$router->any('/admin/riders',     'AdminController@riders');
+$router->any('/admin/products',   'AdminController@products');
+$router->any('/admin/logout',     'AdminController@logout');
+
 return $router;
