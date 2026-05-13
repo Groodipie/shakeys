@@ -75,7 +75,7 @@ $selQty       = $editing['qty'] ?? 1;
   <?php endif; ?>
 
   <div class="pd-card">
-    <form method="POST" action="<?= e(url('/product?id=' . $prodId)) ?>" id="pdForm">
+    <form method="POST" action="<?= e(url('/product/' . $prodId)) ?>" id="pdForm">
       <?php if ($editKey !== ''): ?>
         <input type="hidden" name="edit_key" value="<?= e($editKey) ?>">
       <?php endif; ?>
